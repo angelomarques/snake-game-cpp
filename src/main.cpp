@@ -9,6 +9,9 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height)
 
 int main()
 {
+    const int screen_width = 800;
+    const int screen_height = 600;
+
     // Initialize GLFW library
     if (!glfwInit())
     {
@@ -17,7 +20,7 @@ int main()
     }
 
     // Create a GLFW window
-    GLFWwindow *window = glfwCreateWindow(800, 600, "OpenGL Square", NULL, NULL);
+    GLFWwindow *window = glfwCreateWindow(screen_width, screen_height, "OpenGL Square", NULL, NULL);
     if (!window)
     {
         std::cerr << "Failed to create window!" << std::endl;
@@ -32,7 +35,7 @@ int main()
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     // OpenGL viewport initial settings
-    glViewport(0, 0, 800, 600);
+    glViewport(0, 0, screen_width, screen_height);
 
     // Main render loop
     while (!glfwWindowShouldClose(window))
