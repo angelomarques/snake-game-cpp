@@ -1,5 +1,6 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include "shape.hpp"
 
 // Function to handle resizing of the window
 void framebuffer_size_callback(GLFWwindow *window, int width, int height)
@@ -37,6 +38,8 @@ int main()
     // OpenGL viewport initial settings
     glViewport(0, 0, screen_width, screen_height);
 
+    Square square_shape;
+
     // Main render loop
     while (!glfwWindowShouldClose(window))
     {
@@ -44,14 +47,7 @@ int main()
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // Draw a square using OpenGL's immediate mode (deprecated)
-        glBegin(GL_QUADS);           // Start drawing a quadrilateral
-        glColor3f(1.0f, 0.0f, 0.0f); // Red color
-        glVertex2f(-0.5f, -0.5f);    // Bottom left
-        glVertex2f(0.5f, -0.5f);     // Bottom right
-        glVertex2f(0.5f, 0.5f);      // Top right
-        glVertex2f(-0.5f, 0.5f);     // Top left
-        glEnd();                     // End drawing the quadrilateral
+        square_shape.draw();
 
         // Swap buffers (display the rendered frame)
         glfwSwapBuffers(window);

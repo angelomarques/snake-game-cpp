@@ -8,7 +8,7 @@ CXXFLAGS = -Wall -std=c++17
 LIBS = -lglfw -lGL -lGLU
 
 # Source files
-SRC = src/main.cpp
+SRC = src/main.cpp src/shape.cpp
 
 # Output binary
 OUT = main
