@@ -20,8 +20,8 @@ Game::Game(std::string name) : shader("src/shaders/vertex_shader.glsl", "src/sha
     // Define square vertices (two triangles to form a square)
     float vertices[] = {
         // positions
-        -0.5f, -0.5f, // bottom left
-        0.5f, -0.5f,  // bottom right
+        -0.5f, -1.0f, // bottom left
+        0.5f, -1.0f,  // bottom right
         0.5f, 0.5f,   // top right
         -0.5f, 0.5f   // top left
     };

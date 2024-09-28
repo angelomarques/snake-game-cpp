@@ -13,8 +13,8 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height)
 
 int main()
 {
-    const int screen_width = 800;
-    const int screen_height = 600;
+    const int screen_width = 1000;
+    const int screen_height = 800;
 
     // Initialize GLFW library
     if (!glfwInit())
