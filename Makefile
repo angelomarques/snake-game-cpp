@@ -5,7 +5,7 @@ CXX = g++
 CXXFLAGS = -Wall -std=c++17
 
 # Libraries
-LIBS = -lglfw -lGL -lGLU
+LIBS = -lglfw -lGL -lGLU -lGLEW
 
 # Source files
 SRC = src/main.cpp src/shape.cpp
