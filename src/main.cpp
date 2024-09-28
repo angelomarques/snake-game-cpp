@@ -3,66 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-
-// Function to read shader source from a file
-std::string
-readShaderSource(const std::string &filePath)
-{
-    std::ifstream file(filePath);
-    std::stringstream buffer;
-    buffer << file.rdbuf();
-    return buffer.str();
-}
-
-// Function to compile a shader
-GLuint compileShader(GLenum type, const std::string &source)
-{
-    GLuint shader = glCreateShader(type);
-    const char *src = source.c_str();
-    glShaderSource(shader, 1, &src, nullptr);
-    glCompileShader(shader);
-
-    // Check for compilation errors
-    int success;
-    glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
-        char infoLog[512];
-        glGetShaderInfoLog(shader, 512, nullptr, infoLog);
-        std::cerr << "Error: Shader compilation failed\n"
-                  << infoLog << std::endl;
-    }
-
-    return shader;
-}
-
-// Function to link shaders into a program
-GLuint createShaderProgram(const std::string &vertexShaderSource, const std::string &fragmentShaderSource)
-{
-    GLuint vertexShader = compileShader(GL_VERTEX_SHADER, vertexShaderSource);
-    GLuint fragmentShader = compileShader(GL_FRAGMENT_SHADER, fragmentShaderSource);
-
-    GLuint shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glLinkProgram(shaderProgram);
-
-    // Check for linking errors
-    int success;
-    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-    if (!success)
-    {
-        char infoLog[512];
-        glGetProgramInfoLog(shaderProgram, 512, nullptr, infoLog);
-        std::cerr << "Error: Shader program linking failed\n"
-                  << infoLog << std::endl;
-    }
-
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
-
-    return shaderProgram;
-}
+#include "shader.hpp"
 
 // Function to handle resizing of the window
 void framebuffer_size_callback(GLFWwindow *window, int width, int height)
@@ -147,9 +88,7 @@ int main()
     glBindVertexArray(0);
 
     // Load and compile shaders
-    std::string vertexShaderSource = readShaderSource("src/shaders/vertex_shader.glsl");
-    std::string fragmentShaderSource = readShaderSource("src/shaders/fragment_shader.glsl");
-    GLuint shaderProgram = createShaderProgram(vertexShaderSource, fragmentShaderSource);
+    Shader my_shader("src/shaders/vertex_shader.glsl", "src/shaders/fragment_shader.glsl");
 
     // Main render loop
     while (!glfwWindowShouldClose(window))
@@ -159,7 +98,7 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);
 
         // Use the shader program
-        glUseProgram(shaderProgram);
+        glUseProgram(my_shader.get_shader_program());
 
         // Bind VAO and draw the square using the element array
         glBindVertexArray(VAO);
@@ -176,7 +115,6 @@ int main()
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);
-    glDeleteProgram(shaderProgram);
 
     // Terminate GLFW
     glfwTerminate();
