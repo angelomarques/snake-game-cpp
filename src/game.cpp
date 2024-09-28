@@ -12,23 +12,34 @@ void Game::render()
 
     // Bind VAO and draw the square using the element array
     glBindVertexArray(this->VAO);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
 }
 
 Game::Game(std::string name) : shader("src/shaders/vertex_shader.glsl", "src/shaders/fragment_shader.glsl"), name(name)
 {
     // Define square vertices (two triangles to form a square)
     float vertices[] = {
-        // positions
+        // first rectangle coordinates
         -0.5f, -1.0f, // bottom left
         0.5f, -1.0f,  // bottom right
         0.5f, 0.5f,   // top right
-        -0.5f, 0.5f   // top left
+        -0.5f, 0.5f,  // top left
+
+        // second rectangle coordinates
+        0.75f, -1.0f, // bottom left
+        0.85f, -1.0f, // bottom right
+        0.85f, 0.5f,  // top right
+        0.75f, 0.5f   // top left
     };
 
     unsigned int indices[] = {
+        // First square
         0, 1, 2, // First triangle
-        2, 3, 0  // Second triangle
+        2, 3, 0, // Second triangle
+
+        // Second square
+        4, 5, 6, // First triangle
+        6, 7, 4  // Second triangle
     };
 
     // Create VAO, VBO, and EBO
