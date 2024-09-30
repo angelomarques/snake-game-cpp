@@ -13,8 +13,8 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height)
 
 int main()
 {
-    const int screen_width = 1000;
-    const int screen_height = 800;
+    const GLint SCREEN_WIDTH = 1000;
+    const GLint SCREEN_HEIGHT = 800;
 
     // Initialize GLFW library
     if (!glfwInit())
@@ -23,8 +23,13 @@ int main()
         return -1;
     }
 
+    // Set GLFW properties
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
     // Create a GLFW window
-    GLFWwindow *window = glfwCreateWindow(screen_width, screen_height, "OpenGL Square", NULL, NULL);
+    GLFWwindow *window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "OpenGL Square", NULL, NULL);
     if (!window)
     {
         std::cerr << "Failed to create window!" << std::endl;
@@ -46,17 +51,13 @@ int main()
     }
 
     // OpenGL viewport initial settings
-    glViewport(0, 0, screen_width, screen_height);
+    glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-    Game game("Snake Game");
+    Game game(window);
 
     // Main render loop
     while (!glfwWindowShouldClose(window))
     {
-        // Clear the screen with a black color
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-
         game.render();
 
         // Swap buffers (display the rendered frame)

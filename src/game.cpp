@@ -3,19 +3,49 @@
 #include <iostream>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+void Game::processInput()
+{
+    const float moveSpeed = 0.01f;
+
+    if (glfwGetKey(this->window, GLFW_KEY_LEFT) == GLFW_PRESS)
+        this->pos_x -= moveSpeed;
+    if (glfwGetKey(this->window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+        this->pos_x += moveSpeed;
+    if (glfwGetKey(this->window, GLFW_KEY_UP) == GLFW_PRESS)
+        this->pos_y += moveSpeed;
+    if (glfwGetKey(this->window, GLFW_KEY_DOWN) == GLFW_PRESS)
+        this->pos_y -= moveSpeed;
+}
 
 void Game::render()
 {
+    this->processInput();
+
+    // Clear the screen with a black color
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
 
     // Use the shader program
     glUseProgram(this->shader.get_shader_program());
+
+    // Apply the transformation (translation) to move the square
+    glm::mat4 transform = glm::mat4(1.0f); // Identity matrix
+    transform = glm::translate(transform, glm::vec3(this->pos_x, this->pos_y, 0.0f));
+
+    // Send the transformation to the vertex shader
+    GLuint transformLoc = glGetUniformLocation(this->shader.get_shader_program(), "transform");
+    glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
 
     // Bind VAO and draw the square using the element array
     glBindVertexArray(this->VAO);
     glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
 }
 
-Game::Game(std::string name) : shader("src/shaders/vertex_shader.glsl", "src/shaders/fragment_shader.glsl"), name(name)
+Game::Game(GLFWwindow *window) : window(window), shader("src/shaders/vertex_shader.glsl", "src/shaders/fragment_shader.glsl"), pos_x(0.0f), pos_y(0.0f)
 {
     // Define square vertices (two triangles to form a square)
     float vertices[] = {
