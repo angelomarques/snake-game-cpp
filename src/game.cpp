@@ -7,18 +7,51 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+void Rectangle::draw(GLuint shaderProgram, GLuint VAO)
+{
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(this->position, 0.0f));
+    model = glm::scale(model, glm::vec3(this->size, 1.0f));
+
+    int modelLoc = glGetUniformLocation(shaderProgram, "model");
+    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+
+    glBindVertexArray(VAO);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
+}
+
 void Game::processInput()
 {
-    const float moveSpeed = 0.01f;
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+    {
+        // Add a new rectangle when SPACE is pressed
+        Rectangle newRect;
+        newRect.position = glm::vec2(0.0f, 0.0f);
+        newRect.size = glm::vec2(0.2f, 0.2f);
+        this->rectangles.push_back(newRect);
+        selectedRect = this->rectangles.size() - 1; // Select the newly added rectangle
+    }
 
-    if (glfwGetKey(this->window, GLFW_KEY_LEFT) == GLFW_PRESS)
-        this->pos_x -= moveSpeed;
-    if (glfwGetKey(this->window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-        this->pos_x += moveSpeed;
-    if (glfwGetKey(this->window, GLFW_KEY_UP) == GLFW_PRESS)
-        this->pos_y += moveSpeed;
-    if (glfwGetKey(this->window, GLFW_KEY_DOWN) == GLFW_PRESS)
-        this->pos_y -= moveSpeed;
+    if (selectedRect >= 0)
+    {
+        if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+        {
+            this->rectangles[selectedRect].position.x -= 0.01f;
+        }
+        if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+        {
+            this->rectangles[selectedRect].position.x += 0.01f;
+        }
+        if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+        {
+            this->rectangles[selectedRect].position.y += 0.01f;
+        }
+        if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+        {
+            this->rectangles[selectedRect].position.y -= 0.01f;
+        }
+    }
 }
 
 void Game::render()
@@ -32,17 +65,22 @@ void Game::render()
     // Use the shader program
     glUseProgram(this->shader.get_shader_program());
 
-    // Apply the transformation (translation) to move the square
-    glm::mat4 transform = glm::mat4(1.0f); // Identity matrix
-    transform = glm::translate(transform, glm::vec3(this->pos_x, this->pos_y, 0.0f));
+    // // Apply the transformation (translation) to move the square
+    // glm::mat4 transform = glm::mat4(1.0f); // Identity matrix
+    // transform = glm::translate(transform, glm::vec3(this->pos_x, this->pos_y, 0.0f));
 
-    // Send the transformation to the vertex shader
-    GLuint transformLoc = glGetUniformLocation(this->shader.get_shader_program(), "transform");
-    glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
+    // // Send the transformation to the vertex shader
+    // GLuint transformLoc = glGetUniformLocation(this->shader.get_shader_program(), "transform");
+    // glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
 
-    // Bind VAO and draw the square using the element array
-    glBindVertexArray(this->VAO);
-    glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
+    // // Bind VAO and draw the square using the element array
+    // glBindVertexArray(this->VAO);
+    // glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
+
+    for (auto &rect : rectangles)
+    {
+        rect.draw(this->shader.get_shader_program(), VAO);
+    }
 }
 
 Game::Game(GLFWwindow *window) : window(window), shader("src/shaders/vertex_shader.glsl", "src/shaders/fragment_shader.glsl"), pos_x(0.0f), pos_y(0.0f)
@@ -95,6 +133,8 @@ Game::Game(GLFWwindow *window) : window(window), shader("src/shaders/vertex_shad
     // Unbind the VBO and VAO (optional)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
+
+    this->rectangles = {};
 }
 
 Game::~Game()

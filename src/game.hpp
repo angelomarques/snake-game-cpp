@@ -6,7 +6,17 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <vector>
 #include "shader.hpp"
+
+class Rectangle
+{
+public:
+    glm::vec2 position;
+    glm::vec2 size;
+
+    void draw(GLuint shaderProgram, GLuint VAO);
+};
 
 class Game
 {
@@ -21,6 +31,10 @@ private:
     float pos_x, pos_y;
 
     void processInput();
+
+    std::vector<Rectangle> rectangles; // Vector to store rectangles
+
+    int selectedRect = -1; // Track which rectangle is selected
 
 public:
     Game(GLFWwindow *window);
