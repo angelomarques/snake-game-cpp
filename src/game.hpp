@@ -11,11 +11,16 @@
 
 class Rectangle
 {
-public:
     glm::vec2 position;
     glm::vec2 size;
 
+public:
+    Rectangle(const glm::vec2 &position, const glm::vec2 &size);
+
     void draw(GLuint shaderProgram, GLuint VAO);
+
+    void translate_x(float distance);
+    void translate_y(float distance);
 };
 
 class Game

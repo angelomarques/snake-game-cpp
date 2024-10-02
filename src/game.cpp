@@ -21,14 +21,26 @@ void Rectangle::draw(GLuint shaderProgram, GLuint VAO)
     glBindVertexArray(0);
 }
 
+void Rectangle::translate_x(float distance)
+{
+    this->position.x += distance;
+}
+
+void Rectangle::translate_y(float distance)
+{
+    this->position.y += distance;
+}
+
+Rectangle::Rectangle(const glm::vec2 &position, const glm::vec2 &size) : position(position), size(size)
+{
+}
+
 void Game::processInput()
 {
     if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
     {
         // Add a new rectangle when SPACE is pressed
-        Rectangle newRect;
-        newRect.position = glm::vec2(0.0f, 0.0f);
-        newRect.size = glm::vec2(0.2f, 0.2f);
+        Rectangle newRect(glm::vec2(0.0f, 0.0f), glm::vec2(0.2f, 0.2f));
         this->rectangles.push_back(newRect);
         selectedRect = this->rectangles.size() - 1; // Select the newly added rectangle
     }
@@ -37,19 +49,19 @@ void Game::processInput()
     {
         if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
         {
-            this->rectangles[selectedRect].position.x -= 0.01f;
+            this->rectangles[selectedRect].translate_x(-0.01f);
         }
         if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
         {
-            this->rectangles[selectedRect].position.x += 0.01f;
+            this->rectangles[selectedRect].translate_x(0.01f);
         }
         if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
         {
-            this->rectangles[selectedRect].position.y += 0.01f;
+            this->rectangles[selectedRect].translate_y(0.01f);
         }
         if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
         {
-            this->rectangles[selectedRect].position.y -= 0.01f;
+            this->rectangles[selectedRect].translate_y(-0.01f);
         }
     }
 }
