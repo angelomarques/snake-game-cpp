@@ -1,20 +1,33 @@
-#include <GLFW/glfw3.h>
 #include "shape.hpp"
 #include <iostream>
 
 // Constructor implementation
 Shape::Shape(const std::string &name) : name(name) {}
 
-Square::Square() : Shape("square") {}
-
-void Square::draw() const
+void Rectangle::draw(GLuint shaderProgram, GLuint VAO) const
 {
-    // Draw a square using OpenGL's immediate mode (deprecated)
-    glBegin(GL_QUADS);           // Start drawing a quadrilateral
-    glColor3f(1.0f, 0.0f, 0.0f); // Red color
-    glVertex2f(-0.5f, -0.5f);    // Bottom left
-    glVertex2f(0.5f, -0.5f);     // Bottom right
-    glVertex2f(0.5f, 0.5f);      // Top right
-    glVertex2f(-0.5f, 0.5f);     // Top left
-    glEnd();                     // End drawing the quadrilateral
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(this->position, 0.0f));
+    model = glm::scale(model, glm::vec3(this->size, 1.0f));
+
+    int modelLoc = glGetUniformLocation(shaderProgram, "model");
+    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+
+    glBindVertexArray(VAO);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
+}
+
+void Rectangle::translate_x(float distance)
+{
+    this->position.x += distance;
+}
+
+void Rectangle::translate_y(float distance)
+{
+    this->position.y += distance;
+}
+
+Rectangle::Rectangle(const glm::vec2 &position, const glm::vec2 &size) : Shape("rectangle"), position(position), size(size)
+{
 }

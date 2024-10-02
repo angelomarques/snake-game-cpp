@@ -1,39 +1,6 @@
 #include "game.hpp"
 #include "shader.hpp"
 #include <iostream>
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
-void Rectangle::draw(GLuint shaderProgram, GLuint VAO)
-{
-    glm::mat4 model = glm::mat4(1.0f);
-    model = glm::translate(model, glm::vec3(this->position, 0.0f));
-    model = glm::scale(model, glm::vec3(this->size, 1.0f));
-
-    int modelLoc = glGetUniformLocation(shaderProgram, "model");
-    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-
-    glBindVertexArray(VAO);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);
-}
-
-void Rectangle::translate_x(float distance)
-{
-    this->position.x += distance;
-}
-
-void Rectangle::translate_y(float distance)
-{
-    this->position.y += distance;
-}
-
-Rectangle::Rectangle(const glm::vec2 &position, const glm::vec2 &size) : position(position), size(size)
-{
-}
 
 void Game::processInput()
 {
@@ -77,18 +44,6 @@ void Game::render()
     // Use the shader program
     glUseProgram(this->shader.get_shader_program());
 
-    // // Apply the transformation (translation) to move the square
-    // glm::mat4 transform = glm::mat4(1.0f); // Identity matrix
-    // transform = glm::translate(transform, glm::vec3(this->pos_x, this->pos_y, 0.0f));
-
-    // // Send the transformation to the vertex shader
-    // GLuint transformLoc = glGetUniformLocation(this->shader.get_shader_program(), "transform");
-    // glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
-
-    // // Bind VAO and draw the square using the element array
-    // glBindVertexArray(this->VAO);
-    // glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
-
     for (auto &rect : rectangles)
     {
         rect.draw(this->shader.get_shader_program(), VAO);
@@ -104,22 +59,12 @@ Game::Game(GLFWwindow *window) : window(window), shader("src/shaders/vertex_shad
         0.5f, -1.0f,  // bottom right
         0.5f, 0.5f,   // top right
         -0.5f, 0.5f,  // top left
-
-        // second rectangle coordinates
-        0.75f, -1.0f, // bottom left
-        0.85f, -1.0f, // bottom right
-        0.85f, 0.5f,  // top right
-        0.75f, 0.5f   // top left
     };
 
     unsigned int indices[] = {
         // First square
         0, 1, 2, // First triangle
         2, 3, 0, // Second triangle
-
-        // Second square
-        4, 5, 6, // First triangle
-        6, 7, 4  // Second triangle
     };
 
     // Create VAO, VBO, and EBO

@@ -2,6 +2,11 @@
 #define SHAPE_HPP
 
 #include <string>
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 class Shape
 {
@@ -12,17 +17,23 @@ public:
     // Constructor
     Shape(const std::string &name);
 
-    virtual void draw() const = 0;
+    virtual void draw(GLuint shaderProgram, GLuint VAO) const = 0;
 
     virtual ~Shape() = default;
 };
 
-class Square : public Shape
+class Rectangle : public Shape
 {
-public:
-    Square();
+    glm::vec2 position;
+    glm::vec2 size;
 
-    void draw() const override;
+public:
+    Rectangle(const glm::vec2 &position, const glm::vec2 &size);
+
+    void draw(GLuint shaderProgram, GLuint VAO) const override;
+
+    void translate_x(float distance);
+    void translate_y(float distance);
 };
 
 #endif // SHAPE_HPP

@@ -3,25 +3,9 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 #include <vector>
 #include "shader.hpp"
-
-class Rectangle
-{
-    glm::vec2 position;
-    glm::vec2 size;
-
-public:
-    Rectangle(const glm::vec2 &position, const glm::vec2 &size);
-
-    void draw(GLuint shaderProgram, GLuint VAO);
-
-    void translate_x(float distance);
-    void translate_y(float distance);
-};
+#include "shape.hpp"
 
 class Game
 {
