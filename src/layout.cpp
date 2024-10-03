@@ -1,13 +1,12 @@
 #include "layout.hpp"
 #include "shape.hpp"
+#include "colors.hpp"
 
 GridLayout::GridLayout(int horizontal, int vertical) : horizontal(horizontal), vertical(vertical)
 {
     this->line_width = 0.005f;
 
-    const glm::vec3 light_gray(0.8f, 0.8f, 0.8f);
-
-    this->line_color = light_gray;
+    this->line_color = Colors::light_gray;
 }
 
 void GridLayout::draw(GLuint shaderProgram, GLuint VAO)

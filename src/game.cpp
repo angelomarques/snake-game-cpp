@@ -1,5 +1,6 @@
 #include "game.hpp"
 #include "shader.hpp"
+#include "colors.hpp"
 #include <iostream>
 
 void Game::processInput()
@@ -7,8 +8,7 @@ void Game::processInput()
     if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
     {
         // Add a new rectangle when SPACE is pressed
-        glm::vec3 mediumGray(0.5f, 0.5f, 0.5f);
-        Rectangle newRect(glm::vec2(0.0f, 0.0f), glm::vec2(0.2f, 0.2f), mediumGray);
+        Rectangle newRect(glm::vec2(0.0f, 0.0f), glm::vec2(0.2f, 0.2f), Colors::medium_gray);
         this->rectangles.push_back(newRect);
         selectedRect = this->rectangles.size() - 1; // Select the newly added rectangle
     }
