@@ -4,9 +4,9 @@
 
 GridLayout::GridLayout(int horizontal, int vertical) : horizontal(horizontal), vertical(vertical)
 {
-    this->line_width = 0.005f;
+    this->line_width = 0.002f;
 
-    this->line_color = Colors::light_gray;
+    this->line_color = Colors::dark_gray;
 }
 
 void GridLayout::draw(GLuint shaderProgram, GLuint VAO)
