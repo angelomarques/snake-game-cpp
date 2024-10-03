@@ -4,6 +4,10 @@
 GridLayout::GridLayout(int horizontal, int vertical) : horizontal(horizontal), vertical(vertical)
 {
     this->line_width = 0.005f;
+
+    const glm::vec3 light_gray(0.8f, 0.8f, 0.8f);
+
+    this->line_color = light_gray;
 }
 
 void GridLayout::draw(GLuint shaderProgram, GLuint VAO)
@@ -17,7 +21,7 @@ void GridLayout::draw(GLuint shaderProgram, GLuint VAO)
 
         glm::vec2 horizontal_line_position(0.0f, y_position);
         glm::vec2 horizontal_line_size(2.0f, this->line_width);
-        Rectangle horizontal_line(horizontal_line_position, horizontal_line_size);
+        Rectangle horizontal_line(horizontal_line_position, horizontal_line_size, this->line_color);
         horizontal_line.draw(shaderProgram, VAO);
     }
 
@@ -30,7 +34,7 @@ void GridLayout::draw(GLuint shaderProgram, GLuint VAO)
 
         glm::vec2 vertical_line_position(x_position, 0.0f);
         glm::vec2 vertical_line_size(this->line_width, 2.0f);
-        Rectangle vertical_line(vertical_line_position, vertical_line_size);
+        Rectangle vertical_line(vertical_line_position, vertical_line_size, this->line_color);
         vertical_line.draw(shaderProgram, VAO);
     }
 }
