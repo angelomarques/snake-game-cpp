@@ -44,6 +44,8 @@ void Game::render()
     // Use the shader program
     glUseProgram(this->shader.get_shader_program());
 
+    main_layout.draw(this->shader.get_shader_program(), VAO);
+
     for (auto &rect : rectangles)
     {
         rect.draw(this->shader.get_shader_program(), VAO);

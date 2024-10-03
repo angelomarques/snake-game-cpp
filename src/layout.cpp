@@ -1,20 +1,27 @@
 #include "layout.hpp"
+#include "shape.hpp"
 
 GridLayout::GridLayout(int horizontal, int vertical) : horizontal(horizontal), vertical(vertical) {}
 
 void GridLayout::draw(GLuint shaderProgram, GLuint VAO)
 {
-    glm::vec2 position(0.0f, 0.0f);
-    glm::vec2 size(0.2f, 0.2f);
+    glm::vec2 left_rectangle_position(-1.0f, 0.0f);
+    glm::vec2 left_rectangle_size(0.01f, 2.0f);
+    Rectangle left_rectangle(left_rectangle_position, left_rectangle_size);
+    left_rectangle.draw(shaderProgram, VAO);
 
-    glm::mat4 model = glm::mat4(1.0f);
-    model = glm::translate(model, glm::vec3(position, 0.0f));
-    model = glm::scale(model, glm::vec3(size, 1.0f));
+    glm::vec2 right_rectangle_position(1.0f, 0.0f);
+    glm::vec2 right_rectangle_size(0.01f, 2.0f);
+    Rectangle right_rectangle(right_rectangle_position, right_rectangle_size);
+    right_rectangle.draw(shaderProgram, VAO);
 
-    int modelLoc = glGetUniformLocation(shaderProgram, "model");
-    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+    glm::vec2 top_rectangle_position(0.0f, 1.0f);
+    glm::vec2 top_rectangle_size(2.0f, 0.01f);
+    Rectangle top_rectangle(top_rectangle_position, top_rectangle_size);
+    top_rectangle.draw(shaderProgram, VAO);
 
-    glBindVertexArray(VAO);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);
+    glm::vec2 bottom_rectangle_position(0.0f, -1.0f);
+    glm::vec2 bottom_rectangle_size(2.0f, 0.01f);
+    Rectangle bottom_rectangle(bottom_rectangle_position, bottom_rectangle_size);
+    bottom_rectangle.draw(shaderProgram, VAO);
 }
