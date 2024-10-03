@@ -10,6 +10,7 @@
 class GridLayout
 {
     int horizontal, vertical;
+    float line_width;
 
 public:
     GridLayout(int horizontal, int vertical);

@@ -1,27 +1,36 @@
 #include "layout.hpp"
 #include "shape.hpp"
 
-GridLayout::GridLayout(int horizontal, int vertical) : horizontal(horizontal), vertical(vertical) {}
+GridLayout::GridLayout(int horizontal, int vertical) : horizontal(horizontal), vertical(vertical)
+{
+    this->line_width = 0.005f;
+}
 
 void GridLayout::draw(GLuint shaderProgram, GLuint VAO)
 {
-    glm::vec2 left_rectangle_position(-1.0f, 0.0f);
-    glm::vec2 left_rectangle_size(0.01f, 2.0f);
-    Rectangle left_rectangle(left_rectangle_position, left_rectangle_size);
-    left_rectangle.draw(shaderProgram, VAO);
+    int horizontal_lines_count = this->vertical + 1;
+    float horizontal_lines_threshold = 2.0f / this->vertical;
 
-    glm::vec2 right_rectangle_position(1.0f, 0.0f);
-    glm::vec2 right_rectangle_size(0.01f, 2.0f);
-    Rectangle right_rectangle(right_rectangle_position, right_rectangle_size);
-    right_rectangle.draw(shaderProgram, VAO);
+    for (int i = 0; i < horizontal_lines_count; i++)
+    {
+        float y_position = 1.0f - (horizontal_lines_threshold * i);
 
-    glm::vec2 top_rectangle_position(0.0f, 1.0f);
-    glm::vec2 top_rectangle_size(2.0f, 0.01f);
-    Rectangle top_rectangle(top_rectangle_position, top_rectangle_size);
-    top_rectangle.draw(shaderProgram, VAO);
+        glm::vec2 horizontal_line_position(0.0f, y_position);
+        glm::vec2 horizontal_line_size(2.0f, this->line_width);
+        Rectangle horizontal_line(horizontal_line_position, horizontal_line_size);
+        horizontal_line.draw(shaderProgram, VAO);
+    }
 
-    glm::vec2 bottom_rectangle_position(0.0f, -1.0f);
-    glm::vec2 bottom_rectangle_size(2.0f, 0.01f);
-    Rectangle bottom_rectangle(bottom_rectangle_position, bottom_rectangle_size);
-    bottom_rectangle.draw(shaderProgram, VAO);
+    int vertical_lines_count = this->horizontal + 1;
+    float vertical_lines_threshold = 2.0f / this->horizontal;
+
+    for (int i = 0; i < vertical_lines_count; i++)
+    {
+        float x_position = 1.0f - (vertical_lines_threshold * i);
+
+        glm::vec2 vertical_line_position(x_position, 0.0f);
+        glm::vec2 vertical_line_size(this->line_width, 2.0f);
+        Rectangle vertical_line(vertical_line_position, vertical_line_size);
+        vertical_line.draw(shaderProgram, VAO);
+    }
 }
