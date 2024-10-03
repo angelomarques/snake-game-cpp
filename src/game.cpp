@@ -50,7 +50,7 @@ void Game::render()
     }
 }
 
-Game::Game(GLFWwindow *window) : window(window), shader("src/shaders/vertex_shader.glsl", "src/shaders/fragment_shader.glsl"), pos_x(0.0f), pos_y(0.0f)
+Game::Game(GLFWwindow *window) : window(window), main_layout(5, 5), shader("src/shaders/vertex_shader.glsl", "src/shaders/fragment_shader.glsl"), pos_x(0.0f), pos_y(0.0f)
 {
     // Define square vertices (two triangles to form a square)
     float vertices[] = {

@@ -6,11 +6,13 @@
 #include <vector>
 #include "shader.hpp"
 #include "shape.hpp"
+#include "layout.hpp"
 
 class Game
 {
 private:
     GLFWwindow *window;
+    GridLayout main_layout;
 
     GLuint VAO,
         VBO, EBO;
