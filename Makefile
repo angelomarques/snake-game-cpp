@@ -8,7 +8,7 @@ CXXFLAGS = -Wall -std=c++17
 LIBS = -lglfw -lGL -lGLU -lGLEW
 
 # Source files
-SRC = src/main.cpp src/glad.c src/shape.cpp src/game.cpp src/shader.cpp src/layout.cpp src/colors.cpp
+SRC = src/main.cpp src/glad.c src/shape.cpp src/game.cpp src/shader.cpp src/layout.cpp src/constants.cpp src/snake.cpp
 
 # Output binary
 OUT = main

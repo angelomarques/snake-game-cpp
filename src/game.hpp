@@ -7,12 +7,14 @@
 #include "shader.hpp"
 #include "shape.hpp"
 #include "layout.hpp"
+#include "snake.hpp"
 
 class Game
 {
 private:
     GLFWwindow *window;
     GridLayout main_layout;
+    Snake snake;
 
     GLuint VAO,
         VBO, EBO;

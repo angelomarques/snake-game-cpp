@@ -1,5 +1,5 @@
-#ifndef COLORS_HPP
-#define COLORS_HPP
+#ifndef CONSTANTS_HPP
+#define CONSTANTS_HPP
 
 // #include <GL/glew.h>
 // #include <GLFW/glfw3.h>
@@ -17,4 +17,8 @@ public:
     static glm::vec3 dark_gray;
 };
 
-#endif // COLORS_HPP
+class Dimensions
+{
+};
+
+#endif // CONSTANTS_HPP

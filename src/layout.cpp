@@ -1,6 +1,6 @@
 #include "layout.hpp"
 #include "shape.hpp"
-#include "colors.hpp"
+#include "constants.hpp"
 
 GridLayout::GridLayout(int horizontal, int vertical) : horizontal(horizontal), vertical(vertical)
 {

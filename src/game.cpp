@@ -1,6 +1,6 @@
 #include "game.hpp"
 #include "shader.hpp"
-#include "colors.hpp"
+#include "constants.hpp"
 #include <iostream>
 
 void Game::processInput()
@@ -53,7 +53,7 @@ void Game::render()
     }
 }
 
-Game::Game(GLFWwindow *window) : window(window), main_layout(20, 20), shader("src/shaders/vertex_shader.glsl", "src/shaders/fragment_shader.glsl"), pos_x(0.0f), pos_y(0.0f)
+Game::Game(GLFWwindow *window) : window(window), main_layout(20, 20), snake(2.0f / 20), shader("src/shaders/vertex_shader.glsl", "src/shaders/fragment_shader.glsl"), pos_x(0.0f), pos_y(0.0f)
 {
     // Define square vertices (two triangles to form a square)
     float vertices[] = {
