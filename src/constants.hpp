@@ -15,6 +15,7 @@ public:
     static glm::vec3 light_gray;
     static glm::vec3 medium_gray;
     static glm::vec3 dark_gray;
+    static glm::vec3 green;
 };
 
 class Dimensions

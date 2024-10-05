@@ -47,10 +47,12 @@ void Game::render()
 
     main_layout.draw(this->shader.get_shader_program(), VAO);
 
-    for (auto &rect : rectangles)
-    {
-        rect.draw(this->shader.get_shader_program(), VAO);
-    }
+    snake.draw(this->shader.get_shader_program(), this->VAO);
+
+    // for (auto &rect : rectangles)
+    // {
+    //     rect.draw(this->shader.get_shader_program(), VAO);
+    // }
 }
 
 Game::Game(GLFWwindow *window) : window(window), main_layout(Dimensions::grid_axis_count, Dimensions::grid_axis_count), snake(Dimensions::total_width / Dimensions::grid_axis_count), shader("src/shaders/vertex_shader.glsl", "src/shaders/fragment_shader.glsl"), pos_x(0.0f), pos_y(0.0f)
