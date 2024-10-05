@@ -23,8 +23,6 @@ private:
 
     float pos_x, pos_y;
 
-    void processInput();
-
     std::vector<Rectangle> rectangles; // Vector to store rectangles
 
     int selectedRect = -1; // Track which rectangle is selected

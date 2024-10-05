@@ -3,40 +3,8 @@
 #include "constants.hpp"
 #include <iostream>
 
-void Game::processInput()
-{
-    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-    {
-        // Add a new rectangle when SPACE is pressed
-        Rectangle newRect(glm::vec2(0.0f, 0.0f), glm::vec2(0.2f, 0.2f), Colors::medium_gray);
-        this->rectangles.push_back(newRect);
-        selectedRect = this->rectangles.size() - 1; // Select the newly added rectangle
-    }
-
-    if (selectedRect >= 0)
-    {
-        if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
-        {
-            this->rectangles[selectedRect].translate_x(-0.01f);
-        }
-        if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-        {
-            this->rectangles[selectedRect].translate_x(0.01f);
-        }
-        if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-        {
-            this->rectangles[selectedRect].translate_y(0.01f);
-        }
-        if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-        {
-            this->rectangles[selectedRect].translate_y(-0.01f);
-        }
-    }
-}
-
 void Game::render()
 {
-    this->processInput();
 
     // Clear the screen with a black color
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -47,15 +15,11 @@ void Game::render()
 
     main_layout.draw(this->shader.get_shader_program(), VAO);
 
+    this->snake.processInput();
     snake.draw(this->shader.get_shader_program(), this->VAO);
-
-    // for (auto &rect : rectangles)
-    // {
-    //     rect.draw(this->shader.get_shader_program(), VAO);
-    // }
 }
 
-Game::Game(GLFWwindow *window) : window(window), main_layout(Dimensions::grid_axis_count, Dimensions::grid_axis_count), snake(Dimensions::total_width / Dimensions::grid_axis_count), shader("src/shaders/vertex_shader.glsl", "src/shaders/fragment_shader.glsl"), pos_x(0.0f), pos_y(0.0f)
+Game::Game(GLFWwindow *window) : window(window), main_layout(Dimensions::grid_axis_count, Dimensions::grid_axis_count), snake(window, Dimensions::total_width / Dimensions::grid_axis_count), shader("src/shaders/vertex_shader.glsl", "src/shaders/fragment_shader.glsl"), pos_x(0.0f), pos_y(0.0f)
 {
     // Define square vertices (two triangles to form a square)
     float vertices[] = {

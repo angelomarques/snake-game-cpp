@@ -2,7 +2,7 @@
 #include "shape.hpp"
 #include "constants.hpp"
 
-SnakeTile::SnakeTile(float x_position, float y_position) : next(nullptr), x_position(x_position), y_position(y_position) {};
+SnakeTile::SnakeTile(float x_position, float y_position, Rectangle *rectangle) : next(nullptr), rectangle(rectangle), x_position(x_position), y_position(y_position) {};
 
 void Snake::insert_tile(SnakeTile *new_tile)
 {
@@ -16,21 +16,62 @@ void Snake::draw(GLuint shaderProgram, GLuint VAO)
 
     while (current != nullptr)
     {
-        glm::vec2 position(current->x_position, current->y_position);
-        glm::vec2 size(this->tile_size, this->tile_height);
-        Rectangle rectangle(position, size, Colors::green);
-        rectangle.draw(shaderProgram, VAO);
+
+        current->rectangle->draw(shaderProgram, VAO);
+
+        if (this->play == true)
+        {
+            current->rectangle->translate_x(-1 * this->speed);
+        }
 
         current = current->next;
     }
 }
 
-Snake::Snake(float tile_size) : tile_size(tile_size), head_tile(nullptr)
+void Snake::processInput()
+{
+    if (glfwGetKey(this->window, GLFW_KEY_SPACE) == GLFW_PRESS)
+    {
+        // The SPACE is treated as "play" button
+        this->play = true;
+    }
+
+    // if (selectedRect >= 0)
+    // {
+    //     if (glfwGetKey(this->window, GLFW_KEY_LEFT) == GLFW_PRESS)
+    //     {
+    //         this->rectangles[selectedRect].translate_x(-0.01f);
+    //     }
+    //     if (glfwGetKey(this->window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+    //     {
+    //         this->rectangles[selectedRect].translate_x(0.01f);
+    //     }
+    //     if (glfwGetKey(this->window, GLFW_KEY_UP) == GLFW_PRESS)
+    //     {
+    //         this->rectangles[selectedRect].translate_y(0.01f);
+    //     }
+    //     if (glfwGetKey(this->window, GLFW_KEY_DOWN) == GLFW_PRESS)
+    //     {
+    //         this->rectangles[selectedRect].translate_y(-0.01f);
+    //     }
+    // }
+}
+
+Snake::Snake(GLFWwindow *window, float tile_size) : window(window), play(false), speed(0.005f), initial_tile_count(5), tile_size(tile_size), head_tile(nullptr)
 {
     this->tile_height = tile_size / 1.5f;
 
-    SnakeTile *first_tile = new SnakeTile(this->tile_size / -2, this->tile_height);
-    this->insert_tile(first_tile);
+    for (int i = 0; i < this->initial_tile_count; i++)
+    {
+        float tile_x_position = (this->tile_size / -2) + (this->tile_size * i);
+
+        glm::vec2 position(tile_x_position, this->tile_height);
+        glm::vec2 size(this->tile_size, this->tile_height);
+        Rectangle *rectangle = new Rectangle(position, size, Colors::green);
+
+        SnakeTile *first_tile = new SnakeTile(tile_x_position, this->tile_height, rectangle);
+        this->insert_tile(first_tile);
+    }
 }
 
 Snake::~Snake()
@@ -43,6 +84,7 @@ Snake::~Snake()
     {
         SnakeTile *nextNode = current->next;
 
+        delete current->rectangle;
         delete current; // Free the memory
         current = nextNode;
     }
