@@ -19,6 +19,12 @@ public:
 
 class Dimensions
 {
+public:
+    Dimensions();
+
+    static int grid_axis_count;
+    static float total_width;
+    static float total_height;
 };
 
 #endif // CONSTANTS_HPP
