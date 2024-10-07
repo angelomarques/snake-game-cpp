@@ -13,18 +13,48 @@ void Snake::insert_tile(SnakeTile *new_tile)
 void Snake::draw(GLuint shaderProgram, GLuint VAO)
 {
     SnakeTile *current = this->head_tile;
+    SnakeTile *last_tile = current; // The last tile is actually the "head" of the snake
+
+    if (this->play == true)
+    {
+        this->current_tile_position += speed;
+    }
 
     while (current != nullptr)
     {
+        if (this->current_tile_position >= this->tile_size && current->next != nullptr)
+        {
+            current->rectangle->position.x = current->next->rectangle->position.x;
+            current->rectangle->position.y = current->next->rectangle->position.y;
+        }
 
         current->rectangle->draw(shaderProgram, VAO);
 
-        if (this->play == true)
-        {
-            current->rectangle->translate_x(-1 * this->speed);
-        }
-
+        last_tile = current;
         current = current->next;
+    }
+
+    if (this->current_tile_position >= this->tile_size && last_tile != nullptr)
+    {
+        this->current_tile_position = 0.0f;
+
+        switch (this->current_direction)
+        {
+        case SNAKE_DIRECTION_LEFT:
+            last_tile->rectangle->translate_x(-1 * this->tile_size);
+            break;
+        case SNAKE_DIRECTION_RIGHT:
+            last_tile->rectangle->translate_x(this->tile_size);
+            break;
+        case SNAKE_DIRECTION_UP:
+            last_tile->rectangle->translate_y(this->tile_size);
+            break;
+        case SNAKE_DIRECTION_DOWN:
+            last_tile->rectangle->translate_y(-1 * this->tile_size);
+            break;
+        default:
+            break;
+        }
     }
 }
 
@@ -35,29 +65,34 @@ void Snake::processInput()
         // The SPACE is treated as "play" button
         this->play = true;
     }
+    if (glfwGetKey(this->window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    {
+        // The SPACE is treated as "play" button
+        this->play = false;
+    }
 
     if (this->head_tile != nullptr)
     {
         if (glfwGetKey(this->window, GLFW_KEY_LEFT) == GLFW_PRESS)
         {
-            this->head_tile->rectangle->translate_x(-1 * (this->tile_size / 4));
+            this->current_direction = SNAKE_DIRECTION_LEFT;
         }
         if (glfwGetKey(this->window, GLFW_KEY_RIGHT) == GLFW_PRESS)
         {
-            this->head_tile->rectangle->translate_x(this->tile_size / 4);
+            this->current_direction = SNAKE_DIRECTION_RIGHT;
         }
         if (glfwGetKey(this->window, GLFW_KEY_UP) == GLFW_PRESS)
         {
-            this->head_tile->rectangle->translate_y(this->tile_size / 4);
+            this->current_direction = SNAKE_DIRECTION_UP;
         }
         if (glfwGetKey(this->window, GLFW_KEY_DOWN) == GLFW_PRESS)
         {
-            this->head_tile->rectangle->translate_y(-1 * (this->tile_size / 4));
+            this->current_direction = SNAKE_DIRECTION_DOWN;
         }
     }
 }
 
-Snake::Snake(GLFWwindow *window, float tile_size) : window(window), play(false), speed(0.005f), initial_tile_count(5), tile_size(tile_size), head_tile(nullptr)
+Snake::Snake(GLFWwindow *window, float tile_size) : window(window), play(false), speed(0.005f), current_tile_position(0.0f), current_direction(SNAKE_DIRECTION_LEFT), initial_tile_count(5), tile_size(tile_size), head_tile(nullptr)
 {
     this->tile_height = tile_size / 1.5f;
 

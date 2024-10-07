@@ -7,6 +7,11 @@
 #include <iostream>
 #include "shape.hpp"
 
+const int SNAKE_DIRECTION_UP = 0;
+const int SNAKE_DIRECTION_DOWN = 1;
+const int SNAKE_DIRECTION_LEFT = 2;
+const int SNAKE_DIRECTION_RIGHT = 3;
+
 class SnakeTile
 {
 public:
@@ -24,6 +29,8 @@ class Snake
     GLFWwindow *window;
     bool play;
     float speed;
+    float current_tile_position;
+    int current_direction;
 
     int initial_tile_count;
     float tile_size;

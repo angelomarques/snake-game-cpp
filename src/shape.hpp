@@ -27,10 +27,11 @@ public:
 
 class Rectangle : public Shape
 {
-    glm::vec2 position;
     glm::vec2 size;
 
 public:
+    glm::vec2 position;
+
     Rectangle(const glm::vec2 &position, const glm::vec2 &size, const glm::vec3 &color);
 
     void draw(GLuint shaderProgram, GLuint VAO) const override;

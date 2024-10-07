@@ -31,6 +31,6 @@ void Rectangle::translate_y(float distance)
     this->position.y += distance;
 }
 
-Rectangle::Rectangle(const glm::vec2 &position, const glm::vec2 &size, const glm::vec3 &color) : Shape("rectangle", color), position(position), size(size)
+Rectangle::Rectangle(const glm::vec2 &position, const glm::vec2 &size, const glm::vec3 &color) : Shape("rectangle", color), size(size), position(position)
 {
 }
