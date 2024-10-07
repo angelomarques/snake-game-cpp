@@ -36,25 +36,25 @@ void Snake::processInput()
         this->play = true;
     }
 
-    // if (selectedRect >= 0)
-    // {
-    //     if (glfwGetKey(this->window, GLFW_KEY_LEFT) == GLFW_PRESS)
-    //     {
-    //         this->rectangles[selectedRect].translate_x(-0.01f);
-    //     }
-    //     if (glfwGetKey(this->window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-    //     {
-    //         this->rectangles[selectedRect].translate_x(0.01f);
-    //     }
-    //     if (glfwGetKey(this->window, GLFW_KEY_UP) == GLFW_PRESS)
-    //     {
-    //         this->rectangles[selectedRect].translate_y(0.01f);
-    //     }
-    //     if (glfwGetKey(this->window, GLFW_KEY_DOWN) == GLFW_PRESS)
-    //     {
-    //         this->rectangles[selectedRect].translate_y(-0.01f);
-    //     }
-    // }
+    if (this->head_tile != nullptr)
+    {
+        if (glfwGetKey(this->window, GLFW_KEY_LEFT) == GLFW_PRESS)
+        {
+            this->head_tile->rectangle->translate_x(-1 * (this->tile_size / 4));
+        }
+        if (glfwGetKey(this->window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+        {
+            this->head_tile->rectangle->translate_x(this->tile_size / 4);
+        }
+        if (glfwGetKey(this->window, GLFW_KEY_UP) == GLFW_PRESS)
+        {
+            this->head_tile->rectangle->translate_y(this->tile_size / 4);
+        }
+        if (glfwGetKey(this->window, GLFW_KEY_DOWN) == GLFW_PRESS)
+        {
+            this->head_tile->rectangle->translate_y(-1 * (this->tile_size / 4));
+        }
+    }
 }
 
 Snake::Snake(GLFWwindow *window, float tile_size) : window(window), play(false), speed(0.005f), initial_tile_count(5), tile_size(tile_size), head_tile(nullptr)
