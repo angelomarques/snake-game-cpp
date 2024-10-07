@@ -26,6 +26,9 @@ public:
     static int grid_axis_count;
     static float total_width;
     static float total_height;
+
+    static float positive_border_coordinate;
+    static float negative_border_coordinate;
 };
 
 #endif // CONSTANTS_HPP

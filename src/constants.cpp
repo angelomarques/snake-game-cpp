@@ -12,3 +12,6 @@ Dimensions::Dimensions() {}
 int Dimensions::grid_axis_count = 20;
 float Dimensions::total_width = 2.0f;
 float Dimensions::total_height = 2.0f;
+
+float Dimensions::positive_border_coordinate = 1.0f;
+float Dimensions::negative_border_coordinate = -1.0f;

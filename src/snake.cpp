@@ -38,6 +38,12 @@ void Snake::draw(GLuint shaderProgram, GLuint VAO)
     {
         this->current_tile_position = 0.0f;
 
+        if (last_tile->rectangle->position.x >= Dimensions::positive_border_coordinate || last_tile->rectangle->position.x <= Dimensions::negative_border_coordinate || last_tile->rectangle->position.y >= Dimensions::positive_border_coordinate || last_tile->rectangle->position.y <= Dimensions::negative_border_coordinate)
+        {
+            // GAME OVER!!!
+            this->play = false;
+        }
+
         switch (this->current_direction)
         {
         case SNAKE_DIRECTION_LEFT:
