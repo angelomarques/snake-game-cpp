@@ -5,9 +5,14 @@
 
 SnakeTile::SnakeTile(float x_position, float y_position, Rectangle *rectangle) : next(nullptr), rectangle(rectangle), x_position(x_position), y_position(y_position) {};
 
-void Snake::draw_apple()
+void Snake::draw_apple(GLuint shaderProgram, GLuint VAO)
 {
-    std::cout << "random number: " << Utils::get_random_integer(1, 20) << std::endl;
+    glm::vec2 apple_position(0.2f, -0.5f);
+    glm::vec2 apple_size(this->tile_size, this->tile_height);
+
+    Rectangle apple(apple_position, apple_size, Colors::red);
+
+    apple.draw(shaderProgram, VAO);
 }
 
 bool Snake::check_snake_collision(glm::vec2 new_head_position)
@@ -124,6 +129,8 @@ void Snake::draw(GLuint shaderProgram, GLuint VAO)
             this->play = false;
         }
     }
+
+    this->draw_apple(shaderProgram, VAO);
 }
 
 void Snake::processInput()

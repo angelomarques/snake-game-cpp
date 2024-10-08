@@ -49,7 +49,7 @@ class Snake
 
     bool check_snake_collision(glm::vec2 new_head_position);
 
-    void draw_apple();
+    void draw_apple(GLuint shaderProgram, GLuint VAO);
 
 public:
     Snake(GLFWwindow *window, float tile_size);
