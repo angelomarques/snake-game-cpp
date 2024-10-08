@@ -1,8 +1,14 @@
 #include "snake.hpp"
 #include "shape.hpp"
 #include "constants.hpp"
+#include "utils.hpp"
 
 SnakeTile::SnakeTile(float x_position, float y_position, Rectangle *rectangle) : next(nullptr), rectangle(rectangle), x_position(x_position), y_position(y_position) {};
+
+void Snake::draw_apple()
+{
+    std::cout << "random number: " << Utils::get_random_integer(1, 20) << std::endl;
+}
 
 bool Snake::check_snake_collision(glm::vec2 new_head_position)
 {
