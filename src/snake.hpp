@@ -38,6 +38,7 @@ class Snake
     float tile_height;
 
     SnakeTile *head_tile;
+    Rectangle *apple;
 
     void reset();
 
