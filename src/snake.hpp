@@ -38,12 +38,14 @@ class Snake
 
     SnakeTile *head_tile;
 
+    // void reset();
+
+    void insert_tile(SnakeTile *tile);
+
 public:
     Snake(GLFWwindow *window, float tile_size);
 
     void draw(GLuint shaderProgram, GLuint VAO);
-
-    void insert_tile(SnakeTile *tile);
 
     void processInput();
 

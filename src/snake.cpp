@@ -38,12 +38,6 @@ void Snake::draw(GLuint shaderProgram, GLuint VAO)
     {
         this->current_tile_position = 0.0f;
 
-        if (last_tile->rectangle->position.x >= Dimensions::positive_border_coordinate || last_tile->rectangle->position.x <= Dimensions::negative_border_coordinate || last_tile->rectangle->position.y >= Dimensions::positive_border_coordinate || last_tile->rectangle->position.y <= Dimensions::negative_border_coordinate)
-        {
-            // GAME OVER!!!
-            this->play = false;
-        }
-
         switch (this->current_direction)
         {
         case SNAKE_DIRECTION_LEFT:
@@ -61,6 +55,33 @@ void Snake::draw(GLuint shaderProgram, GLuint VAO)
         default:
             break;
         }
+
+        float new_head_x_position = last_tile->rectangle->position.x;
+        float new_head_y_position = last_tile->rectangle->position.y;
+
+        switch (this->current_direction)
+        {
+        case SNAKE_DIRECTION_LEFT:
+            new_head_x_position -= this->tile_size;
+            break;
+        case SNAKE_DIRECTION_RIGHT:
+            new_head_x_position += this->tile_size;
+            break;
+        case SNAKE_DIRECTION_UP:
+            new_head_y_position += this->tile_size;
+            break;
+        case SNAKE_DIRECTION_DOWN:
+            new_head_y_position -= this->tile_size;
+            break;
+        default:
+            break;
+        }
+
+        if (new_head_x_position >= Dimensions::positive_border_coordinate || new_head_x_position <= Dimensions::negative_border_coordinate || new_head_y_position >= Dimensions::positive_border_coordinate || new_head_y_position <= Dimensions::negative_border_coordinate)
+        {
+            // GAME OVER!!!
+            this->play = false;
+        }
     }
 }
 
@@ -76,6 +97,11 @@ void Snake::processInput()
         // The SPACE is treated as "play" button
         this->play = false;
     }
+
+    // if (glfwGetKey(this->window, GLFW_KEY_R) == GLFW_PRESS)
+    // {
+    //     this->reset();
+    // }
 
     if (this->head_tile != nullptr)
     {
