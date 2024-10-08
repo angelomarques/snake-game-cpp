@@ -10,6 +10,10 @@ void Snake::insert_tile(SnakeTile *new_tile)
     this->head_tile = new_tile;
 }
 
+void Snake::reset()
+{
+}
+
 void Snake::draw(GLuint shaderProgram, GLuint VAO)
 {
     SnakeTile *current = this->head_tile;
@@ -98,10 +102,10 @@ void Snake::processInput()
         this->play = false;
     }
 
-    // if (glfwGetKey(this->window, GLFW_KEY_R) == GLFW_PRESS)
-    // {
-    //     this->reset();
-    // }
+    if (glfwGetKey(this->window, GLFW_KEY_R) == GLFW_PRESS)
+    {
+        this->reset();
+    }
 
     if (this->head_tile != nullptr)
     {
@@ -124,7 +128,7 @@ void Snake::processInput()
     }
 }
 
-Snake::Snake(GLFWwindow *window, float tile_size) : window(window), play(false), speed(0.005f), current_tile_position(0.0f), current_direction(SNAKE_DIRECTION_LEFT), initial_tile_count(5), tile_size(tile_size), head_tile(nullptr)
+void Snake::create_initial_snake()
 {
     this->tile_height = tile_size / 1.5f;
 
@@ -136,12 +140,12 @@ Snake::Snake(GLFWwindow *window, float tile_size) : window(window), play(false),
         glm::vec2 size(this->tile_size, this->tile_height);
         Rectangle *rectangle = new Rectangle(position, size, Colors::green);
 
-        SnakeTile *first_tile = new SnakeTile(tile_x_position, this->tile_height, rectangle);
-        this->insert_tile(first_tile);
+        SnakeTile *current_tile = new SnakeTile(tile_x_position, this->tile_height, rectangle);
+        this->insert_tile(current_tile);
     }
 }
 
-Snake::~Snake()
+void Snake::delete_snake()
 {
     std::cout << "Deleting Snake tiles..." << std::endl;
 
@@ -155,4 +159,14 @@ Snake::~Snake()
         delete current; // Free the memory
         current = nextNode;
     }
+}
+
+Snake::Snake(GLFWwindow *window, float tile_size) : window(window), play(false), speed(0.005f), current_tile_position(0.0f), current_direction(SNAKE_DIRECTION_LEFT), initial_tile_count(5), tile_size(tile_size), head_tile(nullptr)
+{
+    this->create_initial_snake();
+}
+
+Snake::~Snake()
+{
+    this->delete_snake();
 }

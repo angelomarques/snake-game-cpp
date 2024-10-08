@@ -38,9 +38,13 @@ class Snake
 
     SnakeTile *head_tile;
 
-    // void reset();
+    void reset();
 
     void insert_tile(SnakeTile *tile);
+
+    void create_initial_snake();
+
+    void delete_snake();
 
 public:
     Snake(GLFWwindow *window, float tile_size);
