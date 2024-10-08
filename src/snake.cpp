@@ -4,6 +4,30 @@
 
 SnakeTile::SnakeTile(float x_position, float y_position, Rectangle *rectangle) : next(nullptr), rectangle(rectangle), x_position(x_position), y_position(y_position) {};
 
+bool Snake::check_snake_collision(glm::vec2 new_head_position)
+{
+    SnakeTile *current = this->head_tile;
+
+    while (current != nullptr)
+    {
+        // this will get all tiles except for the last one, which is the head of the snake
+        if (current->next == nullptr)
+            break;
+
+        float x_positions_difference = std::fabs(new_head_position.x - current->rectangle->position.x);
+        float y_positions_difference = std::fabs(new_head_position.y - current->rectangle->position.y);
+
+        if (y_positions_difference < this->tile_size && x_positions_difference < this->tile_size)
+        {
+            return true;
+        }
+
+        current = current->next;
+    }
+
+    return false;
+}
+
 void Snake::insert_tile(SnakeTile *new_tile)
 {
     new_tile->next = this->head_tile;
@@ -81,6 +105,11 @@ void Snake::draw(GLuint shaderProgram, GLuint VAO)
             break;
         default:
             break;
+        }
+
+        if (this->check_snake_collision(glm::vec2(new_head_x_position, new_head_y_position)) == true)
+        {
+            this->play = false;
         }
 
         if (new_head_x_position >= Dimensions::positive_border_coordinate || new_head_x_position <= Dimensions::negative_border_coordinate || new_head_y_position >= Dimensions::positive_border_coordinate || new_head_y_position <= Dimensions::negative_border_coordinate)

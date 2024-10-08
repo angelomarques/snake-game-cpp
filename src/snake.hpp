@@ -5,6 +5,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <iostream>
+#include <cmath>
 #include "shape.hpp"
 
 const int SNAKE_DIRECTION_UP = 0;
@@ -45,6 +46,8 @@ class Snake
     void create_initial_snake();
 
     void delete_snake();
+
+    bool check_snake_collision(glm::vec2 new_head_position);
 
 public:
     Snake(GLFWwindow *window, float tile_size);
