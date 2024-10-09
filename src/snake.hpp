@@ -52,6 +52,10 @@ class Snake
 
     void draw_apple(GLuint shaderProgram, GLuint VAO);
 
+    glm::vec2 get_coordinates(int x_grid_axis, int y_grid_axis);
+
+    float get_single_coordinate(int grid_axis, float grid_width);
+
 public:
     Snake(GLFWwindow *window, float tile_size);
 

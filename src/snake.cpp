@@ -5,6 +5,21 @@
 
 SnakeTile::SnakeTile(float x_position, float y_position, Rectangle *rectangle) : next(nullptr), rectangle(rectangle), x_position(x_position), y_position(y_position) {};
 
+float Snake::get_single_coordinate(int grid_axis, float grid_width)
+{
+    // following the function -> -1.1 + x * (2 / grids_count) = y
+    float res = -1 - (grid_width / 2) + grid_axis * (2.0 / Dimensions::grid_axis_count);
+
+    return res;
+}
+
+glm::vec2 Snake::get_coordinates(int x_grid_axis, int y_grid_axis)
+{
+    glm::vec2 res = glm::vec2(this->get_single_coordinate(x_grid_axis, this->tile_size), this->get_single_coordinate(y_grid_axis, this->tile_height));
+
+    return res;
+}
+
 void Snake::draw_apple(GLuint shaderProgram, GLuint VAO)
 {
     if (this->apple != nullptr)
@@ -213,17 +228,13 @@ Snake::Snake(GLFWwindow *window, float tile_size) : window(window), play(false),
 {
     this->create_initial_snake();
 
-    // following the function -> -1.1 + x * (2 / grids_count) = y
     const int random_x_number = Utils::get_random_integer(1, Dimensions::grid_axis_count);
-    float apple_x_position = -1 - (this->tile_size / 2) + random_x_number * (2.0 / Dimensions::grid_axis_count);
-
     const int random_y_number = Utils::get_random_integer(1, Dimensions::grid_axis_count);
-    float apple_y_position = -1 - (this->tile_height / 2) + random_y_number * (2.0 / Dimensions::grid_axis_count);
 
-    glm::vec2 apple_position(apple_x_position, apple_y_position);
+    glm::vec2 apple_coordinates = this->get_coordinates(random_x_number, random_y_number);
     glm::vec2 apple_size(this->tile_size, this->tile_height);
 
-    this->apple = new Rectangle(apple_position, apple_size, Colors::red);
+    this->apple = new Rectangle(apple_coordinates, apple_size, Colors::red);
 }
 
 Snake::~Snake()
