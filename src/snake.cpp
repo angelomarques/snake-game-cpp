@@ -7,8 +7,8 @@ SnakeTile::SnakeTile(float x_position, float y_position, Rectangle *rectangle) :
 
 void Snake::draw_apple(GLuint shaderProgram, GLuint VAO)
 {
-
-    this->apple->draw(shaderProgram, VAO);
+    if (this->apple != nullptr)
+        this->apple->draw(shaderProgram, VAO);
 }
 
 bool Snake::check_snake_collision(glm::vec2 new_head_position)
