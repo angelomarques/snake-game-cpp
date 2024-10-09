@@ -19,10 +19,7 @@ public:
     SnakeTile *next;
     Rectangle *rectangle;
 
-    float x_position;
-    float y_position;
-
-    SnakeTile(float x_position, float y_position, Rectangle *rectangle);
+    SnakeTile(Rectangle *rectangle);
 };
 
 class Snake

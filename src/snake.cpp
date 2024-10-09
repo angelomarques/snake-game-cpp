@@ -3,7 +3,7 @@
 #include "constants.hpp"
 #include "utils.hpp"
 
-SnakeTile::SnakeTile(float x_position, float y_position, Rectangle *rectangle) : next(nullptr), rectangle(rectangle), x_position(x_position), y_position(y_position) {};
+SnakeTile::SnakeTile(Rectangle *rectangle) : next(nullptr), rectangle(rectangle) {};
 
 float Snake::get_single_coordinate(int grid_axis, float grid_width)
 {
@@ -195,7 +195,7 @@ void Snake::create_initial_snake()
         glm::vec2 size(this->tile_size, this->tile_height);
         Rectangle *rectangle = new Rectangle(position, size, Colors::green);
 
-        SnakeTile *current_tile = new SnakeTile(tile_x_position, this->tile_height, rectangle);
+        SnakeTile *current_tile = new SnakeTile(rectangle);
         this->insert_tile(current_tile);
     }
 }
