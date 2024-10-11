@@ -1,11 +1,8 @@
 #ifndef CONSTANTS_HPP
 #define CONSTANTS_HPP
 
-// #include <GL/glew.h>
-// #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
-// #include <glm/gtc/matrix_transform.hpp>
-// #include <glm/gtc/type_ptr.hpp>
+#include <vector>
 
 class Colors
 {
@@ -30,6 +27,8 @@ public:
 
     static float positive_border_coordinate;
     static float negative_border_coordinate;
+
+    static std::vector<std::vector<int>> get_grid_coordinate_pairs();
 };
 
 #endif // CONSTANTS_HPP

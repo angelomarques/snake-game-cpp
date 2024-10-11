@@ -65,6 +65,8 @@ class Snake
     SnakeTile *head_tile;
     Rectangle *apple;
 
+    std::vector<std::vector<int>> available_grids;
+
     void reset();
 
     void insert_tile(SnakeTile *tile);
@@ -81,6 +83,9 @@ class Snake
     glm::vec2 get_coordinates(int x_grid_axis, int y_grid_axis);
 
     float get_single_coordinate(int grid_axis, float grid_width);
+
+    void remove_available_grid_coordinate_pair(int x, int y);
+    void add_available_grid_coordinate_pair(int x, int y);
 
 public:
     Snake(GLFWwindow *window, float tile_size);

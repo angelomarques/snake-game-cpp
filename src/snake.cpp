@@ -86,6 +86,28 @@ std::vector<int> SnakeTile::get_grid_reference(glm::vec2 coordinates)
     return res;
 }
 
+void Snake::remove_available_grid_coordinate_pair(int x, int y)
+{
+    int available_grids_size = this->available_grids.size();
+
+    for (int i = 0; i < available_grids_size; i++)
+    {
+        int current_x = this->available_grids[i][0];
+        int current_y = this->available_grids[i][1];
+
+        if (current_x == x && current_y == y)
+        {
+            this->available_grids.erase(this->available_grids.begin() + i);
+            return;
+        }
+    }
+}
+
+void Snake::add_available_grid_coordinate_pair(int x, int y)
+{
+    this->available_grids.push_back({x, y});
+}
+
 float Snake::get_single_coordinate(int grid_axis, float grid_width)
 {
     // following the function -> -1.1 + x * (2 / grids_count) = y
@@ -267,6 +289,7 @@ void Snake::create_initial_snake()
 
         SnakeTile *current_tile = new SnakeTile(rectangle, this->tile_size, this->tile_height);
         this->insert_tile(current_tile);
+        this->remove_available_grid_coordinate_pair(current_tile->get_x_grid_axis(), current_tile->get_y_grid_axis());
     }
 }
 
@@ -293,7 +316,7 @@ void Snake::delete_snake()
     this->apple = nullptr;
 }
 
-Snake::Snake(GLFWwindow *window, float tile_size) : window(window), play(false), speed(0.005f), current_tile_position(0.0f), current_direction(SNAKE_DIRECTION_LEFT), initial_tile_count(5), tile_size(tile_size), head_tile(nullptr), apple(nullptr)
+Snake::Snake(GLFWwindow *window, float tile_size) : window(window), play(false), speed(0.005f), current_tile_position(0.0f), current_direction(SNAKE_DIRECTION_LEFT), initial_tile_count(5), tile_size(tile_size), head_tile(nullptr), apple(nullptr), available_grids(Dimensions::get_grid_coordinate_pairs())
 {
     this->create_initial_snake();
 
