@@ -86,6 +86,20 @@ std::vector<int> SnakeTile::get_grid_reference(glm::vec2 coordinates)
     return res;
 }
 
+std::vector<int> Snake::get_random_available_grid()
+{
+    int available_grids_size = this->available_grids.size();
+
+    if (available_grids_size <= 0)
+    {
+        return {0, 0};
+    }
+
+    int index = Utils::get_random_integer(0, available_grids_size - 1);
+
+    return this->available_grids[index];
+}
+
 void Snake::remove_available_grid_coordinate_pair(int x, int y)
 {
     int available_grids_size = this->available_grids.size();
@@ -179,10 +193,17 @@ void Snake::draw(GLuint shaderProgram, GLuint VAO)
 {
     SnakeTile *current = this->head_tile;
     SnakeTile *last_tile = current; // The last tile is actually the "head" of the snake
+    SnakeTile *snake_tail_tile = this->head_tile;
 
     if (this->play == true)
     {
         this->current_tile_position += speed;
+    }
+
+    // add the grid pair to the available_grids
+    if (this->current_tile_position >= this->tile_size)
+    {
+        this->add_available_grid_coordinate_pair(snake_tail_tile->get_x_grid_axis(), snake_tail_tile->get_y_grid_axis());
     }
 
     while (current != nullptr)
@@ -231,6 +252,8 @@ void Snake::draw(GLuint shaderProgram, GLuint VAO)
             // GAME OVER!!!
             this->play = false;
         }
+
+        this->remove_available_grid_coordinate_pair(last_tile->get_x_grid_axis(), last_tile->get_y_grid_axis());
     }
 
     this->draw_apple(shaderProgram, VAO);
@@ -320,10 +343,9 @@ Snake::Snake(GLFWwindow *window, float tile_size) : window(window), play(false),
 {
     this->create_initial_snake();
 
-    const int random_x_number = Utils::get_random_integer(1, Dimensions::grid_axis_count);
-    const int random_y_number = Utils::get_random_integer(1, Dimensions::grid_axis_count);
+    const std::vector<int> available_random_grid_pair = this->get_random_available_grid();
 
-    glm::vec2 apple_coordinates = this->get_coordinates(random_x_number, random_y_number);
+    glm::vec2 apple_coordinates = this->get_coordinates(available_random_grid_pair[0], available_random_grid_pair[1]);
     glm::vec2 apple_size(this->tile_size, this->tile_height);
 
     this->apple = new Rectangle(apple_coordinates, apple_size, Colors::red);

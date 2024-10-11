@@ -87,6 +87,8 @@ class Snake
     void remove_available_grid_coordinate_pair(int x, int y);
     void add_available_grid_coordinate_pair(int x, int y);
 
+    std::vector<int> get_random_available_grid();
+
 public:
     Snake(GLFWwindow *window, float tile_size);
 
