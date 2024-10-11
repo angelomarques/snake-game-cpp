@@ -3,7 +3,30 @@
 #include "constants.hpp"
 #include "utils.hpp"
 
-SnakeTile::SnakeTile(Rectangle *rectangle) : next(nullptr), rectangle(rectangle) {};
+SnakeTile::SnakeTile(Rectangle *rectangle, float tile_size, float tile_height) : tile_size(tile_size), tile_height(tile_height), next(nullptr), rectangle(rectangle)
+{
+
+    std::vector<int> grid_reference = this->get_grid_reference(this->rectangle->position);
+
+    this->x_grid_axis = grid_reference[0];
+    this->y_grid_axis = grid_reference[1];
+};
+
+int SnakeTile::get_single_grid_reference(float coordinate, float grid_width)
+{
+    float res = (coordinate + 1 + (grid_width / 2)) / (2.0 / Dimensions::grid_axis_count);
+
+    return std::round(res);
+}
+
+std::vector<int> SnakeTile::get_grid_reference(glm::vec2 coordinates)
+{
+    std::vector<int> res = {
+        this->get_single_grid_reference(coordinates.x, this->tile_size),
+        this->get_single_grid_reference(coordinates.y, this->tile_height)};
+
+    return res;
+}
 
 float Snake::get_single_coordinate(int grid_axis, float grid_width)
 {
@@ -195,7 +218,7 @@ void Snake::create_initial_snake()
         glm::vec2 size(this->tile_size, this->tile_height);
         Rectangle *rectangle = new Rectangle(position, size, Colors::green);
 
-        SnakeTile *current_tile = new SnakeTile(rectangle);
+        SnakeTile *current_tile = new SnakeTile(rectangle, this->tile_size, this->tile_height);
         this->insert_tile(current_tile);
     }
 }

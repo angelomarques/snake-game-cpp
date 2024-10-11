@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 #include <iostream>
 #include <cmath>
+#include <vector>
 #include "shape.hpp"
 
 const int SNAKE_DIRECTION_UP = 0;
@@ -15,11 +16,21 @@ const int SNAKE_DIRECTION_RIGHT = 3;
 
 class SnakeTile
 {
+    float tile_size;
+    float tile_height;
+
+    std::vector<int> get_grid_reference(glm::vec2 coordinates);
+
+    int get_single_grid_reference(float coordinate, float grid_width);
+
 public:
     SnakeTile *next;
     Rectangle *rectangle;
 
-    SnakeTile(Rectangle *rectangle);
+    int x_grid_axis = 0;
+    int y_grid_axis = 0;
+
+    SnakeTile(Rectangle *rectangle, float tile_size, float tile_height);
 };
 
 class Snake
