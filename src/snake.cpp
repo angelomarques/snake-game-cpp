@@ -131,6 +131,16 @@ bool Snake::check_snake_collision(SnakeTile *snake_head)
     return false;
 }
 
+bool Snake::check_border_collision(SnakeTile *snake_head)
+{
+    if (snake_head->get_x_grid_axis() <= 0 || snake_head->get_x_grid_axis() > Dimensions::grid_axis_count || snake_head->get_y_grid_axis() <= 0 || snake_head->get_y_grid_axis() > Dimensions::grid_axis_count)
+    {
+        return true;
+    }
+
+    return false;
+}
+
 void Snake::insert_tile(SnakeTile *new_tile)
 {
     new_tile->next = this->head_tile;
@@ -189,37 +199,16 @@ void Snake::draw(GLuint shaderProgram, GLuint VAO)
             break;
         }
 
-        // float new_head_x_position = last_tile->rectangle->position.x;
-        // float new_head_y_position = last_tile->rectangle->position.y;
-
-        // switch (this->current_direction)
-        // {
-        // case SNAKE_DIRECTION_LEFT:
-        //     new_head_x_position -= this->tile_size;
-        //     break;
-        // case SNAKE_DIRECTION_RIGHT:
-        //     new_head_x_position += this->tile_size;
-        //     break;
-        // case SNAKE_DIRECTION_UP:
-        //     new_head_y_position += this->tile_size;
-        //     break;
-        // case SNAKE_DIRECTION_DOWN:
-        //     new_head_y_position -= this->tile_size;
-        //     break;
-        // default:
-        //     break;
-        // }
-
         if (this->check_snake_collision(last_tile))
         {
             this->play = false;
         }
 
-        // if (new_head_x_position >= Dimensions::positive_border_coordinate || new_head_x_position <= Dimensions::negative_border_coordinate || new_head_y_position >= Dimensions::positive_border_coordinate || new_head_y_position <= Dimensions::negative_border_coordinate)
-        // {
-        //     // GAME OVER!!!
-        //     this->play = false;
-        // }
+        if (this->check_border_collision(last_tile))
+        {
+            // GAME OVER!!!
+            this->play = false;
+        }
     }
 
     this->draw_apple(shaderProgram, VAO);

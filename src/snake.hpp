@@ -74,6 +74,7 @@ class Snake
     void delete_snake();
 
     bool check_snake_collision(SnakeTile *snake_head);
+    bool check_border_collision(SnakeTile *snake_head);
 
     void draw_apple(GLuint shaderProgram, GLuint VAO);
 
