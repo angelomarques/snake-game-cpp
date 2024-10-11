@@ -3,13 +3,71 @@
 #include "constants.hpp"
 #include "utils.hpp"
 
-SnakeTile::SnakeTile(Rectangle *rectangle, float tile_size, float tile_height) : tile_size(tile_size), tile_height(tile_height), next(nullptr), rectangle(rectangle)
+SnakeTile::SnakeTile(Rectangle *rectangle, float tile_size, float tile_height) : tile_size(tile_size), tile_height(tile_height), rectangle(rectangle), next(nullptr)
 {
-
     std::vector<int> grid_reference = this->get_grid_reference(this->rectangle->position);
 
     this->x_grid_axis = grid_reference[0];
     this->y_grid_axis = grid_reference[1];
+};
+
+SnakeTile::~SnakeTile()
+{
+    if (this->rectangle != nullptr)
+    {
+        std::cout << "Deleting snake tile rectangle..." << std::endl;
+        delete this->rectangle;
+    }
+}
+
+void SnakeTile::translate_x(float distance)
+{
+    this->rectangle->translate_x(distance);
+
+    this->x_grid_axis = this->get_single_grid_reference(this->rectangle->position.x, this->tile_size);
+}
+
+void SnakeTile::translate_y(float distance)
+{
+    this->rectangle->translate_y(distance);
+
+    this->y_grid_axis = this->get_single_grid_reference(this->rectangle->position.y, this->tile_height);
+}
+
+float SnakeTile::get_x_position()
+{
+    return this->rectangle->position.x;
+}
+void SnakeTile::set_x_position(float new_position)
+{
+    this->rectangle->position.x = new_position;
+
+    this->x_grid_axis = this->get_single_grid_reference(this->rectangle->position.x, this->tile_size);
+}
+
+float SnakeTile::get_y_position()
+{
+    return this->rectangle->position.y;
+}
+void SnakeTile::set_y_position(float new_position)
+{
+    this->rectangle->position.y = new_position;
+
+    this->y_grid_axis = this->get_single_grid_reference(this->rectangle->position.y, this->tile_height);
+}
+
+int SnakeTile::get_x_grid_axis()
+{
+    return this->x_grid_axis;
+}
+int SnakeTile::get_y_grid_axis()
+{
+    return this->y_grid_axis;
+}
+
+void SnakeTile::draw(GLuint shaderProgram, GLuint VAO)
+{
+    this->rectangle->draw(shaderProgram, VAO);
 };
 
 int SnakeTile::get_single_grid_reference(float coordinate, float grid_width)
@@ -49,7 +107,7 @@ void Snake::draw_apple(GLuint shaderProgram, GLuint VAO)
         this->apple->draw(shaderProgram, VAO);
 }
 
-bool Snake::check_snake_collision(glm::vec2 new_head_position)
+bool Snake::check_snake_collision(SnakeTile *snake_head)
 {
     SnakeTile *current = this->head_tile;
 
@@ -59,10 +117,10 @@ bool Snake::check_snake_collision(glm::vec2 new_head_position)
         if (current->next == nullptr)
             break;
 
-        float x_positions_difference = std::fabs(new_head_position.x - current->rectangle->position.x);
-        float y_positions_difference = std::fabs(new_head_position.y - current->rectangle->position.y);
+        int x_positions_difference = snake_head->get_x_grid_axis() - current->get_x_grid_axis();
+        int y_positions_difference = snake_head->get_y_grid_axis() - current->get_y_grid_axis();
 
-        if (y_positions_difference < this->tile_size && x_positions_difference < this->tile_size)
+        if (y_positions_difference == 0 && x_positions_difference == 0)
         {
             return true;
         }
@@ -99,11 +157,11 @@ void Snake::draw(GLuint shaderProgram, GLuint VAO)
     {
         if (this->current_tile_position >= this->tile_size && current->next != nullptr)
         {
-            current->rectangle->position.x = current->next->rectangle->position.x;
-            current->rectangle->position.y = current->next->rectangle->position.y;
+            current->set_x_position(current->next->get_x_position());
+            current->set_y_position(current->next->get_y_position());
         }
 
-        current->rectangle->draw(shaderProgram, VAO);
+        current->draw(shaderProgram, VAO);
 
         last_tile = current;
         current = current->next;
@@ -116,52 +174,52 @@ void Snake::draw(GLuint shaderProgram, GLuint VAO)
         switch (this->current_direction)
         {
         case SNAKE_DIRECTION_LEFT:
-            last_tile->rectangle->translate_x(-1 * this->tile_size);
+            last_tile->translate_x(-1 * this->tile_size);
             break;
         case SNAKE_DIRECTION_RIGHT:
-            last_tile->rectangle->translate_x(this->tile_size);
+            last_tile->translate_x(this->tile_size);
             break;
         case SNAKE_DIRECTION_UP:
-            last_tile->rectangle->translate_y(this->tile_size);
+            last_tile->translate_y(this->tile_size);
             break;
         case SNAKE_DIRECTION_DOWN:
-            last_tile->rectangle->translate_y(-1 * this->tile_size);
+            last_tile->translate_y(-1 * this->tile_size);
             break;
         default:
             break;
         }
 
-        float new_head_x_position = last_tile->rectangle->position.x;
-        float new_head_y_position = last_tile->rectangle->position.y;
+        // float new_head_x_position = last_tile->rectangle->position.x;
+        // float new_head_y_position = last_tile->rectangle->position.y;
 
-        switch (this->current_direction)
-        {
-        case SNAKE_DIRECTION_LEFT:
-            new_head_x_position -= this->tile_size;
-            break;
-        case SNAKE_DIRECTION_RIGHT:
-            new_head_x_position += this->tile_size;
-            break;
-        case SNAKE_DIRECTION_UP:
-            new_head_y_position += this->tile_size;
-            break;
-        case SNAKE_DIRECTION_DOWN:
-            new_head_y_position -= this->tile_size;
-            break;
-        default:
-            break;
-        }
+        // switch (this->current_direction)
+        // {
+        // case SNAKE_DIRECTION_LEFT:
+        //     new_head_x_position -= this->tile_size;
+        //     break;
+        // case SNAKE_DIRECTION_RIGHT:
+        //     new_head_x_position += this->tile_size;
+        //     break;
+        // case SNAKE_DIRECTION_UP:
+        //     new_head_y_position += this->tile_size;
+        //     break;
+        // case SNAKE_DIRECTION_DOWN:
+        //     new_head_y_position -= this->tile_size;
+        //     break;
+        // default:
+        //     break;
+        // }
 
-        if (this->check_snake_collision(glm::vec2(new_head_x_position, new_head_y_position)) == true)
+        if (this->check_snake_collision(last_tile))
         {
             this->play = false;
         }
 
-        if (new_head_x_position >= Dimensions::positive_border_coordinate || new_head_x_position <= Dimensions::negative_border_coordinate || new_head_y_position >= Dimensions::positive_border_coordinate || new_head_y_position <= Dimensions::negative_border_coordinate)
-        {
-            // GAME OVER!!!
-            this->play = false;
-        }
+        // if (new_head_x_position >= Dimensions::positive_border_coordinate || new_head_x_position <= Dimensions::negative_border_coordinate || new_head_y_position >= Dimensions::positive_border_coordinate || new_head_y_position <= Dimensions::negative_border_coordinate)
+        // {
+        //     // GAME OVER!!!
+        //     this->play = false;
+        // }
     }
 
     this->draw_apple(shaderProgram, VAO);
@@ -233,7 +291,6 @@ void Snake::delete_snake()
     {
         SnakeTile *nextNode = current->next;
 
-        delete current->rectangle;
         delete current; // Free the memory
         current = nextNode;
     }

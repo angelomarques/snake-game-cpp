@@ -18,6 +18,10 @@ class SnakeTile
 {
     float tile_size;
     float tile_height;
+    Rectangle *rectangle;
+
+    int x_grid_axis = 0;
+    int y_grid_axis = 0;
 
     std::vector<int> get_grid_reference(glm::vec2 coordinates);
 
@@ -25,12 +29,25 @@ class SnakeTile
 
 public:
     SnakeTile *next;
-    Rectangle *rectangle;
-
-    int x_grid_axis = 0;
-    int y_grid_axis = 0;
 
     SnakeTile(Rectangle *rectangle, float tile_size, float tile_height);
+
+    void draw(GLuint shaderProgram, GLuint VAO);
+
+    // Getters and Setters:
+    float get_x_position();
+    void set_x_position(float new_position);
+
+    float get_y_position();
+    void set_y_position(float new_position);
+
+    int get_x_grid_axis();
+    int get_y_grid_axis();
+
+    void translate_x(float distance);
+    void translate_y(float distance);
+
+    ~SnakeTile();
 };
 
 class Snake
@@ -56,7 +73,7 @@ class Snake
 
     void delete_snake();
 
-    bool check_snake_collision(glm::vec2 new_head_position);
+    bool check_snake_collision(SnakeTile *snake_head);
 
     void draw_apple(GLuint shaderProgram, GLuint VAO);
 
