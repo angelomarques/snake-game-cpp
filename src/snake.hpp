@@ -63,7 +63,7 @@ class Snake
     float tile_height;
 
     SnakeTile *head_tile;
-    Rectangle *apple;
+    SnakeTile *apple;
 
     std::vector<std::vector<int>> available_grids;
 
@@ -77,6 +77,7 @@ class Snake
 
     bool check_snake_collision(SnakeTile *snake_head);
     bool check_border_collision(SnakeTile *snake_head);
+    bool check_apple_collision(SnakeTile *snake_head);
 
     void draw_apple(GLuint shaderProgram, GLuint VAO);
 
@@ -88,6 +89,8 @@ class Snake
     void add_available_grid_coordinate_pair(int x, int y);
 
     std::vector<int> get_random_available_grid();
+
+    void set_new_apple();
 
 public:
     Snake(GLFWwindow *window, float tile_size);

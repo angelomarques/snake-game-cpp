@@ -86,6 +86,16 @@ std::vector<int> SnakeTile::get_grid_reference(glm::vec2 coordinates)
     return res;
 }
 
+void Snake::set_new_apple()
+{
+    const std::vector<int> available_random_grid_pair = this->get_random_available_grid();
+
+    glm::vec2 apple_coordinates = this->get_coordinates(available_random_grid_pair[0], available_random_grid_pair[1]);
+
+    this->apple->set_x_position(apple_coordinates.x);
+    this->apple->set_y_position(apple_coordinates.y);
+}
+
 std::vector<int> Snake::get_random_available_grid()
 {
     int available_grids_size = this->available_grids.size();
@@ -141,6 +151,14 @@ void Snake::draw_apple(GLuint shaderProgram, GLuint VAO)
 {
     if (this->apple != nullptr)
         this->apple->draw(shaderProgram, VAO);
+}
+
+bool Snake::check_apple_collision(SnakeTile *snake_head)
+{
+    if (this->apple->get_x_grid_axis() == snake_head->get_x_grid_axis() && this->apple->get_y_grid_axis() == snake_head->get_y_grid_axis())
+        return true;
+
+    return false;
 }
 
 bool Snake::check_snake_collision(SnakeTile *snake_head)
@@ -242,6 +260,8 @@ void Snake::draw(GLuint shaderProgram, GLuint VAO)
             break;
         }
 
+        this->remove_available_grid_coordinate_pair(last_tile->get_x_grid_axis(), last_tile->get_y_grid_axis());
+
         if (this->check_snake_collision(last_tile))
         {
             this->play = false;
@@ -253,7 +273,10 @@ void Snake::draw(GLuint shaderProgram, GLuint VAO)
             this->play = false;
         }
 
-        this->remove_available_grid_coordinate_pair(last_tile->get_x_grid_axis(), last_tile->get_y_grid_axis());
+        if (this->check_apple_collision(last_tile))
+        {
+            this->set_new_apple();
+        }
     }
 
     this->draw_apple(shaderProgram, VAO);
@@ -348,7 +371,8 @@ Snake::Snake(GLFWwindow *window, float tile_size) : window(window), play(false),
     glm::vec2 apple_coordinates = this->get_coordinates(available_random_grid_pair[0], available_random_grid_pair[1]);
     glm::vec2 apple_size(this->tile_size, this->tile_height);
 
-    this->apple = new Rectangle(apple_coordinates, apple_size, Colors::red);
+    Rectangle *apple_rectangle = new Rectangle(apple_coordinates, apple_size, Colors::red);
+    this->apple = new SnakeTile(apple_rectangle, this->tile_size, this->tile_height);
 }
 
 Snake::~Snake()
