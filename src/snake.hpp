@@ -19,6 +19,7 @@ class SnakeTile
     float tile_size;
     float tile_height;
     Rectangle *rectangle;
+    int direction;
 
     int x_grid_axis = 0;
     int y_grid_axis = 0;
@@ -46,6 +47,9 @@ public:
 
     void translate_x(float distance);
     void translate_y(float distance);
+
+    void set_direction(int new_direction);
+    int get_direction();
 
     ~SnakeTile();
 };

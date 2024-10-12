@@ -3,7 +3,7 @@
 #include "constants.hpp"
 #include "utils.hpp"
 
-SnakeTile::SnakeTile(Rectangle *rectangle, float tile_size, float tile_height) : tile_size(tile_size), tile_height(tile_height), rectangle(rectangle), next(nullptr)
+SnakeTile::SnakeTile(Rectangle *rectangle, float tile_size, float tile_height) : tile_size(tile_size), tile_height(tile_height), rectangle(rectangle), direction(SNAKE_DIRECTION_LEFT), next(nullptr)
 {
     std::vector<int> grid_reference = this->get_grid_reference(this->rectangle->position);
 
@@ -18,6 +18,16 @@ SnakeTile::~SnakeTile()
         std::cout << "Deleting snake tile rectangle..." << std::endl;
         delete this->rectangle;
     }
+}
+
+void SnakeTile::set_direction(int new_direction)
+{
+    this->direction = new_direction;
+}
+
+int SnakeTile::get_direction()
+{
+    return this->direction;
 }
 
 void SnakeTile::translate_x(float distance)
@@ -88,6 +98,38 @@ std::vector<int> SnakeTile::get_grid_reference(glm::vec2 coordinates)
 
 void Snake::set_new_apple()
 {
+    glm::vec2 new_tile_position(this->head_tile->get_x_position(), this->head_tile->get_y_position());
+    int new_tile_direction = SNAKE_DIRECTION_LEFT;
+
+    switch (this->head_tile->get_direction())
+    {
+    case SNAKE_DIRECTION_LEFT:
+        new_tile_direction = SNAKE_DIRECTION_LEFT;
+        new_tile_position.x = this->head_tile->get_x_position() + this->tile_size;
+        break;
+    case SNAKE_DIRECTION_RIGHT:
+        new_tile_direction = SNAKE_DIRECTION_RIGHT;
+        new_tile_position.x = this->head_tile->get_x_position() - this->tile_size;
+        break;
+    case SNAKE_DIRECTION_UP:
+        new_tile_direction = SNAKE_DIRECTION_UP;
+        new_tile_position.y = this->head_tile->get_y_position() - this->tile_size;
+        break;
+    case SNAKE_DIRECTION_DOWN:
+        new_tile_direction = SNAKE_DIRECTION_DOWN;
+        new_tile_position.y = this->head_tile->get_y_position() + this->tile_size;
+        break;
+    default:
+        break;
+    }
+
+    glm::vec2 size(this->tile_size, this->tile_height);
+    Rectangle *rectangle = new Rectangle(new_tile_position, size, Colors::green);
+
+    SnakeTile *new_tile = new SnakeTile(rectangle, this->tile_size, this->tile_height);
+    new_tile->set_direction(new_tile_direction);
+    this->insert_tile(new_tile);
+
     const std::vector<int> available_random_grid_pair = this->get_random_available_grid();
 
     glm::vec2 apple_coordinates = this->get_coordinates(available_random_grid_pair[0], available_random_grid_pair[1]);
@@ -197,6 +239,8 @@ bool Snake::check_border_collision(SnakeTile *snake_head)
 
 void Snake::insert_tile(SnakeTile *new_tile)
 {
+    this->remove_available_grid_coordinate_pair(new_tile->get_x_grid_axis(), new_tile->get_y_grid_axis());
+
     new_tile->next = this->head_tile;
     this->head_tile = new_tile;
 }
@@ -230,6 +274,7 @@ void Snake::draw(GLuint shaderProgram, GLuint VAO)
         {
             current->set_x_position(current->next->get_x_position());
             current->set_y_position(current->next->get_y_position());
+            current->set_direction(current->next->get_direction());
         }
 
         current->draw(shaderProgram, VAO);
@@ -245,15 +290,19 @@ void Snake::draw(GLuint shaderProgram, GLuint VAO)
         switch (this->current_direction)
         {
         case SNAKE_DIRECTION_LEFT:
+            last_tile->set_direction(SNAKE_DIRECTION_LEFT);
             last_tile->translate_x(-1 * this->tile_size);
             break;
         case SNAKE_DIRECTION_RIGHT:
+            last_tile->set_direction(SNAKE_DIRECTION_RIGHT);
             last_tile->translate_x(this->tile_size);
             break;
         case SNAKE_DIRECTION_UP:
+            last_tile->set_direction(SNAKE_DIRECTION_UP);
             last_tile->translate_y(this->tile_size);
             break;
         case SNAKE_DIRECTION_DOWN:
+            last_tile->set_direction(SNAKE_DIRECTION_DOWN);
             last_tile->translate_y(-1 * this->tile_size);
             break;
         default:
@@ -335,7 +384,6 @@ void Snake::create_initial_snake()
 
         SnakeTile *current_tile = new SnakeTile(rectangle, this->tile_size, this->tile_height);
         this->insert_tile(current_tile);
-        this->remove_available_grid_coordinate_pair(current_tile->get_x_grid_axis(), current_tile->get_y_grid_axis());
     }
 }
 
