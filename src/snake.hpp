@@ -20,13 +20,20 @@ class SnakeTile
     float tile_height;
     Rectangle *rectangle;
     int direction;
+    std::vector<Rectangle> borders = {};
 
     int x_grid_axis = 0;
     int y_grid_axis = 0;
 
+    float border_width = 0.01f;
+
     std::vector<int> get_grid_reference(glm::vec2 coordinates);
 
     int get_single_grid_reference(float coordinate, float grid_width);
+
+    void set_borders();
+
+    Rectangle get_new_border(int location);
 
 public:
     SnakeTile *next;

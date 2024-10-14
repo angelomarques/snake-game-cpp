@@ -9,6 +9,8 @@ SnakeTile::SnakeTile(Rectangle *rectangle, float tile_size, float tile_height) :
 
     this->x_grid_axis = grid_reference[0];
     this->y_grid_axis = grid_reference[1];
+
+    this->set_borders();
 };
 
 SnakeTile::~SnakeTile()
@@ -20,9 +22,74 @@ SnakeTile::~SnakeTile()
     }
 }
 
+Rectangle SnakeTile::get_new_border(int location)
+{
+    glm::vec2 position(this->get_x_position(), this->get_y_position());
+    glm::vec2 size(this->border_width, this->tile_height);
+
+    switch (location)
+    {
+    case SNAKE_DIRECTION_LEFT:
+        position.x -= this->tile_size + this->border_width;
+        break;
+    case SNAKE_DIRECTION_RIGHT:
+        position.x -= this->tile_size + this->border_width;
+        break;
+    case SNAKE_DIRECTION_UP:
+        position.x -= this->tile_size + this->border_width;
+        break;
+    case SNAKE_DIRECTION_DOWN:
+        position.x -= this->tile_size + this->border_width;
+        break;
+    default:
+        break;
+    }
+
+    Rectangle border(position, size, Colors::black);
+
+    return border;
+}
+
+void SnakeTile::set_borders()
+{
+    this->borders.clear();
+
+    switch (this->direction)
+    {
+    case SNAKE_DIRECTION_LEFT:
+    {
+        Rectangle left_border = this->get_new_border(SNAKE_DIRECTION_LEFT);
+        this->borders.push_back(left_border);
+        break;
+    }
+    case SNAKE_DIRECTION_RIGHT:
+    {
+        Rectangle left_border = this->get_new_border(SNAKE_DIRECTION_LEFT);
+        this->borders.push_back(left_border);
+        break;
+    }
+    case SNAKE_DIRECTION_UP:
+    {
+        Rectangle left_border = this->get_new_border(SNAKE_DIRECTION_LEFT);
+        this->borders.push_back(left_border);
+        break;
+    }
+    case SNAKE_DIRECTION_DOWN:
+    {
+        Rectangle left_border = this->get_new_border(SNAKE_DIRECTION_LEFT);
+        this->borders.push_back(left_border);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
 void SnakeTile::set_direction(int new_direction)
 {
     this->direction = new_direction;
+
+    this->set_borders();
 }
 
 int SnakeTile::get_direction()
@@ -78,6 +145,11 @@ int SnakeTile::get_y_grid_axis()
 void SnakeTile::draw(GLuint shaderProgram, GLuint VAO)
 {
     this->rectangle->draw(shaderProgram, VAO);
+
+    for (Rectangle border : this->borders)
+    {
+        border.draw(shaderProgram, VAO);
+    }
 };
 
 int SnakeTile::get_single_grid_reference(float coordinate, float grid_width)
