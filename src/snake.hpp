@@ -25,7 +25,7 @@ class SnakeTile
     int x_grid_axis = 0;
     int y_grid_axis = 0;
 
-    float border_width = 0.01f;
+    float border_width = 0.005f;
 
     std::vector<int> get_grid_reference(glm::vec2 coordinates);
 
