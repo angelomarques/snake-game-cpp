@@ -21,6 +21,7 @@ class SnakeTile
     Rectangle *rectangle;
     int direction;
     std::vector<Rectangle> borders = {};
+    std::vector<bool> border_reference; // {top, right, bottom, left}
 
     int x_grid_axis = 0;
     int y_grid_axis = 0;
