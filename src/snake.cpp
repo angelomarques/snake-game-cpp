@@ -33,13 +33,17 @@ Rectangle SnakeTile::get_new_border(int location)
         position.x = position.x - (this->tile_size / 2) + (this->border_width / 2);
         break;
     case SNAKE_DIRECTION_RIGHT:
-        // position.x -= this->tile_size + this->border_width;
+        position.x = position.x + (this->tile_size / 2) - (this->border_width / 2);
         break;
     case SNAKE_DIRECTION_UP:
-        // position.x -= this->tile_size + this->border_width;
+        size.x = tile_size;
+        size.y = border_width;
+        position.y = position.y + (this->tile_height / 2) - (this->border_width / 2);
         break;
     case SNAKE_DIRECTION_DOWN:
-        // position.x -= this->tile_size + this->border_width;
+        size.x = tile_size;
+        size.y = border_width;
+        position.y = position.y - (this->tile_height) + (this->border_width / 2);
         break;
     default:
         break;
@@ -58,26 +62,34 @@ void SnakeTile::set_borders()
     {
     case SNAKE_DIRECTION_LEFT:
     {
-        Rectangle left_border = this->get_new_border(SNAKE_DIRECTION_LEFT);
-        this->borders.push_back(left_border);
+        Rectangle top_border = this->get_new_border(SNAKE_DIRECTION_UP);
+        this->borders.push_back(top_border);
+        Rectangle bottom_border = this->get_new_border(SNAKE_DIRECTION_DOWN);
+        this->borders.push_back(bottom_border);
         break;
     }
     case SNAKE_DIRECTION_RIGHT:
     {
-        // Rectangle left_border = this->get_new_border(SNAKE_DIRECTION_LEFT);
-        // this->borders.push_back(left_border);
+        Rectangle top_border = this->get_new_border(SNAKE_DIRECTION_UP);
+        this->borders.push_back(top_border);
+        Rectangle bottom_border = this->get_new_border(SNAKE_DIRECTION_DOWN);
+        this->borders.push_back(bottom_border);
         break;
     }
     case SNAKE_DIRECTION_UP:
     {
-        // Rectangle left_border = this->get_new_border(SNAKE_DIRECTION_LEFT);
-        // this->borders.push_back(left_border);
+        Rectangle left_border = this->get_new_border(SNAKE_DIRECTION_LEFT);
+        this->borders.push_back(left_border);
+        Rectangle right_border = this->get_new_border(SNAKE_DIRECTION_RIGHT);
+        this->borders.push_back(right_border);
         break;
     }
     case SNAKE_DIRECTION_DOWN:
     {
-        // Rectangle left_border = this->get_new_border(SNAKE_DIRECTION_LEFT);
-        // this->borders.push_back(left_border);
+        Rectangle left_border = this->get_new_border(SNAKE_DIRECTION_LEFT);
+        this->borders.push_back(left_border);
+        Rectangle right_border = this->get_new_border(SNAKE_DIRECTION_RIGHT);
+        this->borders.push_back(right_border);
         break;
     }
     default:
@@ -102,6 +114,8 @@ void SnakeTile::translate_x(float distance)
     this->rectangle->translate_x(distance);
 
     this->x_grid_axis = this->get_single_grid_reference(this->rectangle->position.x, this->tile_size);
+
+    this->set_borders();
 }
 
 void SnakeTile::translate_y(float distance)
@@ -109,6 +123,8 @@ void SnakeTile::translate_y(float distance)
     this->rectangle->translate_y(distance);
 
     this->y_grid_axis = this->get_single_grid_reference(this->rectangle->position.y, this->tile_height);
+
+    this->set_borders();
 }
 
 float SnakeTile::get_x_position()
@@ -120,6 +136,8 @@ void SnakeTile::set_x_position(float new_position)
     this->rectangle->position.x = new_position;
 
     this->x_grid_axis = this->get_single_grid_reference(this->rectangle->position.x, this->tile_size);
+
+    this->set_borders();
 }
 
 float SnakeTile::get_y_position()
@@ -131,6 +149,8 @@ void SnakeTile::set_y_position(float new_position)
     this->rectangle->position.y = new_position;
 
     this->y_grid_axis = this->get_single_grid_reference(this->rectangle->position.y, this->tile_height);
+
+    this->set_borders();
 }
 
 int SnakeTile::get_x_grid_axis()
