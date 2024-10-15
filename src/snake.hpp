@@ -37,6 +37,7 @@ class SnakeTile
 
 public:
     SnakeTile *next;
+    SnakeTile *previous;
 
     SnakeTile(Rectangle *rectangle, float tile_size, float tile_height);
 

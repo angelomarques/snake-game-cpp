@@ -333,6 +333,11 @@ void Snake::insert_tile(SnakeTile *new_tile)
 {
     this->remove_available_grid_coordinate_pair(new_tile->get_x_grid_axis(), new_tile->get_y_grid_axis());
 
+    if (this->head_tile != nullptr)
+    {
+        this->head_tile->previous = new_tile;
+    }
+
     new_tile->next = this->head_tile;
     this->head_tile = new_tile;
 }
