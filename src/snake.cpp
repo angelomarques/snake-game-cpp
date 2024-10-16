@@ -24,6 +24,9 @@ SnakeTile::~SnakeTile()
 
 void SnakeTile::set_new_borders()
 {
+    int current_x_grid = this->get_x_grid_axis();
+    int current_y_grid = this->get_y_grid_axis();
+
     if (this->previous == nullptr)
     {
         // If true, it's the head of the linked list and the tail of the snake.
@@ -45,8 +48,7 @@ void SnakeTile::set_new_borders()
             break;
         }
     }
-
-    if (this->next == nullptr)
+    else if (this->next == nullptr)
     {
         // If true, it's the tail of the linked list and the head of the snake
         switch (this->direction)
@@ -67,6 +69,26 @@ void SnakeTile::set_new_borders()
             break;
         }
     }
+    else if (this->previous->get_x_grid_axis() == current_x_grid && this->next->get_x_grid_axis() == current_x_grid)
+    {
+        this->border_reference = {false, true, false, true};
+    }
+    else if (this->previous->get_y_grid_axis() == current_y_grid && this->next->get_y_grid_axis() == current_y_grid)
+    {
+        this->border_reference = {true, false, true, false};
+    }
+    else if (this->next->get_x_grid_axis() == current_x_grid && this->previous->get_x_grid_axis() - current_x_grid == 1)
+    {
+        this->border_reference = {false, false, true, true};
+    }
+    // else if (this->next->get_y_grid_axis() == current_y_grid && this->previous->get_y_grid_axis() - current_y_grid == 1)
+    // {
+    //     this->border_reference = {true, false, false, true};
+    // }
+    // else if (this->next->get_x_grid_axis() == current_x_grid && this->previous->get_x_grid_axis() - current_x_grid == -1)
+    // {
+    //     this->border_reference = {true, false, false, true};
+    // }
 
     this->set_borders();
 }
@@ -421,7 +443,16 @@ void Snake::draw(GLuint shaderProgram, GLuint VAO)
             current->set_direction(current->next->get_direction());
         }
 
+        last_tile = current;
+        current = current->next;
+    }
+
+    current = this->head_tile;
+
+    while (current != nullptr)
+    {
         current->set_new_borders();
+
         current->draw(shaderProgram, VAO);
 
         last_tile = current;
