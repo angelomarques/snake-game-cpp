@@ -60,6 +60,8 @@ public:
     void set_direction(int new_direction);
     int get_direction();
 
+    void set_new_borders();
+
     ~SnakeTile();
 };
 

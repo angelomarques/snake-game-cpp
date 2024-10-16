@@ -22,6 +22,55 @@ SnakeTile::~SnakeTile()
     }
 }
 
+void SnakeTile::set_new_borders()
+{
+    if (this->previous == nullptr)
+    {
+        // If true, it's the head of the linked list and the tail of the snake.
+        switch (this->direction)
+        {
+        case SNAKE_DIRECTION_LEFT:
+            this->border_reference = {true, true, true, false};
+            break;
+        case SNAKE_DIRECTION_RIGHT:
+            this->border_reference = {true, false, true, true};
+            break;
+        case SNAKE_DIRECTION_UP:
+            this->border_reference = {false, true, true, true};
+            break;
+        case SNAKE_DIRECTION_DOWN:
+            this->border_reference = {true, true, false, true};
+            break;
+        default:
+            break;
+        }
+    }
+
+    if (this->next == nullptr)
+    {
+        // If true, it's the tail of the linked list and the head of the snake
+        switch (this->direction)
+        {
+        case SNAKE_DIRECTION_LEFT:
+            this->border_reference = {true, false, true, true};
+            break;
+        case SNAKE_DIRECTION_RIGHT:
+            this->border_reference = {true, true, true, false};
+            break;
+        case SNAKE_DIRECTION_UP:
+            this->border_reference = {true, true, false, true};
+            break;
+        case SNAKE_DIRECTION_DOWN:
+            this->border_reference = {false, true, true, true};
+            break;
+        default:
+            break;
+        }
+    }
+
+    this->set_borders();
+}
+
 Rectangle SnakeTile::get_new_border(int location)
 {
     glm::vec2 position(this->get_x_position(), this->get_y_position());
@@ -372,6 +421,7 @@ void Snake::draw(GLuint shaderProgram, GLuint VAO)
             current->set_direction(current->next->get_direction());
         }
 
+        current->set_new_borders();
         current->draw(shaderProgram, VAO);
 
         last_tile = current;
