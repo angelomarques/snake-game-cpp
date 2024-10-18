@@ -27,56 +27,42 @@ void SnakeTile::set_new_borders()
     int current_x_grid = this->get_x_grid_axis();
     int current_y_grid = this->get_y_grid_axis();
 
-    if (this->previous == nullptr)
-    {
-        // If true, it's the head of the linked list and the tail of the snake.
-        switch (this->direction)
-        {
-        case SNAKE_DIRECTION_LEFT:
-            this->border_reference = {true, true, true, false};
-            break;
-        case SNAKE_DIRECTION_RIGHT:
-            this->border_reference = {true, false, true, true};
-            break;
-        case SNAKE_DIRECTION_UP:
-            this->border_reference = {false, true, true, true};
-            break;
-        case SNAKE_DIRECTION_DOWN:
-            this->border_reference = {true, true, false, true};
-            break;
-        default:
-            break;
-        }
-    }
-    else if (this->next == nullptr)
-    {
-        // If true, it's the tail of the linked list and the head of the snake
-        switch (this->direction)
-        {
-        case SNAKE_DIRECTION_LEFT:
-            this->border_reference = {true, false, true, true};
-            break;
-        case SNAKE_DIRECTION_RIGHT:
-            this->border_reference = {true, true, true, false};
-            break;
-        case SNAKE_DIRECTION_UP:
-            this->border_reference = {true, true, false, true};
-            break;
-        case SNAKE_DIRECTION_DOWN:
-            this->border_reference = {false, true, true, true};
-            break;
-        default:
-            break;
-        }
-    }
-    else
-    {
-        bool has_sibling_right = (this->previous->get_y_grid_axis() == current_y_grid && this->previous->get_x_grid_axis() > current_x_grid) || (this->next->get_y_grid_axis() == current_y_grid && this->next->get_x_grid_axis() > current_x_grid);
-        bool has_sibling_left = (this->previous->get_y_grid_axis() == current_y_grid && this->previous->get_x_grid_axis() < current_x_grid) || (this->next->get_y_grid_axis() == current_y_grid && this->next->get_x_grid_axis() < current_x_grid);
-        bool has_sibling_top = (this->previous->get_x_grid_axis() == current_x_grid && this->previous->get_y_grid_axis() > current_y_grid) || (this->next->get_x_grid_axis() == current_x_grid && this->next->get_y_grid_axis() > current_y_grid);
-        bool has_sibling_bottom = (this->previous->get_x_grid_axis() == current_x_grid && this->previous->get_y_grid_axis() < current_y_grid) || (this->next->get_x_grid_axis() == current_x_grid && this->next->get_y_grid_axis() < current_y_grid);
+    this->border_reference = {true, true, true, true};
 
-        this->border_reference = {true, true, true, true};
+    if (this->previous != nullptr)
+    {
+        bool has_sibling_right = this->previous->get_y_grid_axis() == current_y_grid && this->previous->get_x_grid_axis() > current_x_grid;
+        bool has_sibling_left = this->previous->get_y_grid_axis() == current_y_grid && this->previous->get_x_grid_axis() < current_x_grid;
+        bool has_sibling_top = this->previous->get_x_grid_axis() == current_x_grid && this->previous->get_y_grid_axis() > current_y_grid;
+        bool has_sibling_bottom = this->previous->get_x_grid_axis() == current_x_grid && this->previous->get_y_grid_axis() < current_y_grid;
+
+        if (has_sibling_right)
+        {
+            this->border_reference[1] = false;
+        }
+
+        if (has_sibling_left)
+        {
+            this->border_reference[3] = false;
+        }
+
+        if (has_sibling_top)
+        {
+            this->border_reference[0] = false;
+        }
+
+        if (has_sibling_bottom)
+        {
+            this->border_reference[2] = false;
+        }
+    }
+
+    if (this->next != nullptr)
+    {
+        bool has_sibling_right = this->next->get_y_grid_axis() == current_y_grid && this->next->get_x_grid_axis() > current_x_grid;
+        bool has_sibling_left = this->next->get_y_grid_axis() == current_y_grid && this->next->get_x_grid_axis() < current_x_grid;
+        bool has_sibling_top = this->next->get_x_grid_axis() == current_x_grid && this->next->get_y_grid_axis() > current_y_grid;
+        bool has_sibling_bottom = this->next->get_x_grid_axis() == current_x_grid && this->next->get_y_grid_axis() < current_y_grid;
 
         if (has_sibling_right)
         {
