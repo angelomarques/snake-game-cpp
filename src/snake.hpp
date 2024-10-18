@@ -22,6 +22,7 @@ class SnakeTile
     int direction;
     std::vector<Rectangle> borders = {};
     std::vector<bool> border_reference; // {top, right, bottom, left}
+    bool has_borders = true;
 
     int x_grid_axis = 0;
     int y_grid_axis = 0;
@@ -61,6 +62,8 @@ public:
     int get_direction();
 
     void set_new_borders();
+
+    void set_has_borders(bool has_borders);
 
     ~SnakeTile();
 };

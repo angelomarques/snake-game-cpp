@@ -22,6 +22,11 @@ SnakeTile::~SnakeTile()
     }
 }
 
+void SnakeTile::set_has_borders(bool value)
+{
+    this->has_borders = value;
+}
+
 void SnakeTile::set_new_borders()
 {
     int current_x_grid = this->get_x_grid_axis();
@@ -230,9 +235,12 @@ void SnakeTile::draw(GLuint shaderProgram, GLuint VAO)
 {
     this->rectangle->draw(shaderProgram, VAO);
 
-    for (Rectangle border : this->borders)
+    if (this->has_borders)
     {
-        border.draw(shaderProgram, VAO);
+        for (Rectangle border : this->borders)
+        {
+            border.draw(shaderProgram, VAO);
+        }
     }
 };
 
@@ -591,6 +599,7 @@ Snake::Snake(GLFWwindow *window, float tile_size) : window(window), play(false),
 
     Rectangle *apple_rectangle = new Rectangle(apple_coordinates, apple_size, Colors::red);
     this->apple = new SnakeTile(apple_rectangle, this->tile_size, this->tile_height);
+    this->apple->set_has_borders(false);
 }
 
 Snake::~Snake()
