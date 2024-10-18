@@ -69,26 +69,35 @@ void SnakeTile::set_new_borders()
             break;
         }
     }
-    else if (this->previous->get_x_grid_axis() == current_x_grid && this->next->get_x_grid_axis() == current_x_grid)
+    else
     {
-        this->border_reference = {false, true, false, true};
+        bool has_sibling_right = (this->previous->get_y_grid_axis() == current_y_grid && this->previous->get_x_grid_axis() > current_x_grid) || (this->next->get_y_grid_axis() == current_y_grid && this->next->get_x_grid_axis() > current_x_grid);
+        bool has_sibling_left = (this->previous->get_y_grid_axis() == current_y_grid && this->previous->get_x_grid_axis() < current_x_grid) || (this->next->get_y_grid_axis() == current_y_grid && this->next->get_x_grid_axis() < current_x_grid);
+        bool has_sibling_top = (this->previous->get_x_grid_axis() == current_x_grid && this->previous->get_y_grid_axis() > current_y_grid) || (this->next->get_x_grid_axis() == current_x_grid && this->next->get_y_grid_axis() > current_x_grid);
+        bool has_sibling_bottom = (this->previous->get_x_grid_axis() == current_x_grid && this->previous->get_y_grid_axis() < current_y_grid) || (this->next->get_x_grid_axis() == current_x_grid && this->next->get_y_grid_axis() < current_x_grid);
+
+        this->border_reference = {true, true, true, true};
+
+        if (has_sibling_right)
+        {
+            this->border_reference[1] = false;
+        }
+
+        if (has_sibling_left)
+        {
+            this->border_reference[3] = false;
+        }
+
+        if (has_sibling_top)
+        {
+            this->border_reference[0] = false;
+        }
+
+        if (has_sibling_bottom)
+        {
+            this->border_reference[2] = false;
+        }
     }
-    else if (this->previous->get_y_grid_axis() == current_y_grid && this->next->get_y_grid_axis() == current_y_grid)
-    {
-        this->border_reference = {true, false, true, false};
-    }
-    else if (this->next->get_x_grid_axis() == current_x_grid && this->previous->get_x_grid_axis() - current_x_grid == 1)
-    {
-        this->border_reference = {false, false, true, true};
-    }
-    // else if (this->next->get_y_grid_axis() == current_y_grid && this->previous->get_y_grid_axis() - current_y_grid == 1)
-    // {
-    //     this->border_reference = {true, false, false, true};
-    // }
-    // else if (this->next->get_x_grid_axis() == current_x_grid && this->previous->get_x_grid_axis() - current_x_grid == -1)
-    // {
-    //     this->border_reference = {true, false, false, true};
-    // }
 
     this->set_borders();
 }
