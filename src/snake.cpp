@@ -73,8 +73,8 @@ void SnakeTile::set_new_borders()
     {
         bool has_sibling_right = (this->previous->get_y_grid_axis() == current_y_grid && this->previous->get_x_grid_axis() > current_x_grid) || (this->next->get_y_grid_axis() == current_y_grid && this->next->get_x_grid_axis() > current_x_grid);
         bool has_sibling_left = (this->previous->get_y_grid_axis() == current_y_grid && this->previous->get_x_grid_axis() < current_x_grid) || (this->next->get_y_grid_axis() == current_y_grid && this->next->get_x_grid_axis() < current_x_grid);
-        bool has_sibling_top = (this->previous->get_x_grid_axis() == current_x_grid && this->previous->get_y_grid_axis() > current_y_grid) || (this->next->get_x_grid_axis() == current_x_grid && this->next->get_y_grid_axis() > current_x_grid);
-        bool has_sibling_bottom = (this->previous->get_x_grid_axis() == current_x_grid && this->previous->get_y_grid_axis() < current_y_grid) || (this->next->get_x_grid_axis() == current_x_grid && this->next->get_y_grid_axis() < current_x_grid);
+        bool has_sibling_top = (this->previous->get_x_grid_axis() == current_x_grid && this->previous->get_y_grid_axis() > current_y_grid) || (this->next->get_x_grid_axis() == current_x_grid && this->next->get_y_grid_axis() > current_y_grid);
+        bool has_sibling_bottom = (this->previous->get_x_grid_axis() == current_x_grid && this->previous->get_y_grid_axis() < current_y_grid) || (this->next->get_x_grid_axis() == current_x_grid && this->next->get_y_grid_axis() < current_y_grid);
 
         this->border_reference = {true, true, true, true};
 
