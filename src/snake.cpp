@@ -452,16 +452,6 @@ void Snake::draw(GLuint shaderProgram, GLuint VAO)
             current->set_direction(current->next->get_direction());
         }
 
-        last_tile = current;
-        current = current->next;
-    }
-
-    current = this->head_tile;
-
-    while (current != nullptr)
-    {
-        current->set_new_borders();
-
         current->draw(shaderProgram, VAO);
 
         last_tile = current;
@@ -510,6 +500,15 @@ void Snake::draw(GLuint shaderProgram, GLuint VAO)
         if (this->check_apple_collision(last_tile))
         {
             this->set_new_apple();
+        }
+
+        current = this->head_tile;
+
+        while (current != nullptr)
+        {
+            current->set_new_borders();
+
+            current = current->next;
         }
     }
 
