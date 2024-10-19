@@ -22,16 +22,71 @@ SnakeTile::~SnakeTile()
     }
 }
 
-void SnakeTile::set_eyes()
+void SnakeTile::set_eyes_position()
+{
+    if (this->eyes.size() == 2)
+    {
+        switch (this->direction)
+        {
+        case SNAKE_DIRECTION_LEFT:
+            this->eyes[0].position.x = this->get_x_position() - 0.25 * this->tile_size;
+            this->eyes[0].position.y = this->get_y_position();
+            this->eyes[0].set_width(eye_height);
+            this->eyes[0].set_height(eye_width);
+
+            this->eyes[1].position.x = this->get_x_position() - 0.25 * this->tile_size;
+            this->eyes[1].position.y = this->get_y_position() - 0.5 * this->tile_height;
+            this->eyes[1].set_width(eye_height);
+            this->eyes[1].set_height(eye_width);
+            break;
+        case SNAKE_DIRECTION_RIGHT:
+            this->eyes[0].position.x = this->get_x_position() + 0.25 * this->tile_size;
+            this->eyes[0].position.y = this->get_y_position() - 0.5 * this->tile_height;
+            this->eyes[0].set_width(eye_height);
+            this->eyes[0].set_height(eye_width);
+
+            this->eyes[1].position.x = this->get_x_position() + 0.25 * this->tile_size;
+            this->eyes[1].position.y = this->get_y_position();
+            this->eyes[1].set_width(eye_height);
+            this->eyes[1].set_height(eye_width);
+            break;
+
+        case SNAKE_DIRECTION_UP:
+            this->eyes[0].position.x = this->get_x_position() + 0.25 * this->tile_size;
+            this->eyes[0].position.y = this->get_y_position() + 0.25 * this->tile_height;
+
+            this->eyes[1].position.x = this->get_x_position() - 0.25 * this->tile_size;
+            this->eyes[1].position.y = this->get_y_position() + 0.25 * this->tile_height;
+            break;
+
+        case SNAKE_DIRECTION_DOWN:
+            this->eyes[0].position.x = this->get_x_position() - 0.25 * this->tile_size;
+            this->eyes[0].position.y = this->get_y_position() - 0.5 * this->tile_height;
+
+            this->eyes[1].position.x = this->get_x_position() + 0.25 * this->tile_size;
+            this->eyes[1].position.y = this->get_y_position() - 0.5 * this->tile_height;
+            break;
+
+        default:
+            break;
+        }
+    }
+}
+
+void SnakeTile::create_eyes()
 {
     this->eyes.clear();
 
-    glm::vec2 right_position(this->get_x_position(), this->get_y_position());
-    glm::vec2 right_size(this->eye_width, this->eye_width);
+    glm::vec2 position(this->get_x_position(), this->get_y_position());
+    glm::vec2 size(this->eye_width, this->eye_height);
 
-    Rectangle right_eye(right_position, right_size, Colors::black);
+    Rectangle right_eye(position, size, Colors::black);
+    Rectangle left_eye(position, size, Colors::black);
 
     this->eyes.push_back(right_eye);
+    this->eyes.push_back(left_eye);
+
+    this->set_eyes_position();
 }
 
 void SnakeTile::set_has_borders(bool value)
@@ -203,6 +258,8 @@ void SnakeTile::translate_x(float distance)
     this->rectangle->translate_x(distance);
 
     this->x_grid_axis = this->get_single_grid_reference(this->rectangle->position.x, this->tile_size);
+
+    this->set_eyes_position();
 }
 
 void SnakeTile::translate_y(float distance)
@@ -210,6 +267,8 @@ void SnakeTile::translate_y(float distance)
     this->rectangle->translate_y(distance);
 
     this->y_grid_axis = this->get_single_grid_reference(this->rectangle->position.y, this->tile_height);
+
+    this->set_eyes_position();
 }
 
 float SnakeTile::get_x_position()
@@ -221,6 +280,8 @@ void SnakeTile::set_x_position(float new_position)
     this->rectangle->position.x = new_position;
 
     this->x_grid_axis = this->get_single_grid_reference(this->rectangle->position.x, this->tile_size);
+
+    this->set_eyes_position();
 }
 
 float SnakeTile::get_y_position()
@@ -232,6 +293,8 @@ void SnakeTile::set_y_position(float new_position)
     this->rectangle->position.y = new_position;
 
     this->y_grid_axis = this->get_single_grid_reference(this->rectangle->position.y, this->tile_height);
+
+    this->set_eyes_position();
 }
 
 int SnakeTile::get_x_grid_axis()
@@ -585,7 +648,7 @@ void Snake::create_initial_snake()
 
         if (i == 0)
         {
-            current_tile->set_eyes();
+            current_tile->create_eyes();
         }
     }
 }

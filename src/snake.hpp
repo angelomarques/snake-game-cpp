@@ -30,6 +30,7 @@ class SnakeTile
 
     float border_width = 0.005f;
     float eye_width = 0.01f;
+    float eye_height = 0.015f;
 
     std::vector<int> get_grid_reference(glm::vec2 coordinates);
 
@@ -38,6 +39,8 @@ class SnakeTile
     void set_borders();
 
     Rectangle get_new_border(int location);
+
+    void set_eyes_position();
 
 public:
     SnakeTile *next;
@@ -67,7 +70,7 @@ public:
 
     void set_has_borders(bool has_borders);
 
-    void set_eyes();
+    void create_eyes();
 
     ~SnakeTile();
 };

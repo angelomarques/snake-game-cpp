@@ -4,6 +4,16 @@
 // Constructor implementation
 Shape::Shape(const std::string &name, const glm::vec3 &color) : name(name), color(color) {}
 
+void Rectangle::set_width(float new_width)
+{
+    this->size.x = new_width;
+}
+
+void Rectangle::set_height(float new_height)
+{
+    this->size.y = new_height;
+}
+
 void Rectangle::draw(GLuint shaderProgram, GLuint VAO) const
 {
     glm::mat4 model = glm::mat4(1.0f);

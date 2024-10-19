@@ -38,6 +38,9 @@ public:
 
     void translate_x(float distance);
     void translate_y(float distance);
+
+    void set_width(float new_width);
+    void set_height(float new_height);
 };
 
 #endif // SHAPE_HPP
