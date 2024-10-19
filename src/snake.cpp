@@ -22,6 +22,18 @@ SnakeTile::~SnakeTile()
     }
 }
 
+void SnakeTile::set_eyes()
+{
+    this->eyes.clear();
+
+    glm::vec2 right_position(this->get_x_position(), this->get_y_position());
+    glm::vec2 right_size(this->eye_width, this->eye_width);
+
+    Rectangle right_eye(right_position, right_size, Colors::black);
+
+    this->eyes.push_back(right_eye);
+}
+
 void SnakeTile::set_has_borders(bool value)
 {
     this->has_borders = value;
@@ -240,6 +252,14 @@ void SnakeTile::draw(GLuint shaderProgram, GLuint VAO)
         for (Rectangle border : this->borders)
         {
             border.draw(shaderProgram, VAO);
+        }
+    }
+
+    if (this->eyes.size() > 0)
+    {
+        for (Rectangle eye : this->eyes)
+        {
+            eye.draw(shaderProgram, VAO);
         }
     }
 };
@@ -562,6 +582,11 @@ void Snake::create_initial_snake()
 
         SnakeTile *current_tile = new SnakeTile(rectangle, this->tile_size, this->tile_height);
         this->insert_tile(current_tile);
+
+        if (i == 0)
+        {
+            current_tile->set_eyes();
+        }
     }
 }
 

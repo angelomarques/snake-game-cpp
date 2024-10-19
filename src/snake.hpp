@@ -23,11 +23,13 @@ class SnakeTile
     std::vector<Rectangle> borders = {};
     std::vector<bool> border_reference; // {top, right, bottom, left}
     bool has_borders = true;
+    std::vector<Rectangle> eyes = {};
 
     int x_grid_axis = 0;
     int y_grid_axis = 0;
 
     float border_width = 0.005f;
+    float eye_width = 0.01f;
 
     std::vector<int> get_grid_reference(glm::vec2 coordinates);
 
@@ -64,6 +66,8 @@ public:
     void set_new_borders();
 
     void set_has_borders(bool has_borders);
+
+    void set_eyes();
 
     ~SnakeTile();
 };
