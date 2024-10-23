@@ -22,6 +22,8 @@ public:
 
     GLuint get_shader_program();
 
+    void use();
+
     ~Shader();
 };
 

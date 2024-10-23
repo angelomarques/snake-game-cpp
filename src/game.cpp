@@ -11,7 +11,7 @@ void Game::render()
     glClear(GL_COLOR_BUFFER_BIT);
 
     // Use the shader program
-    glUseProgram(this->shader.get_shader_program());
+    this->shader.use();
 
     main_layout.draw(this->shader.get_shader_program(), VAO);
 

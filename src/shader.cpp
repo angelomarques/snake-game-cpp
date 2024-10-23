@@ -3,19 +3,38 @@
 #include <sstream>
 #include <iostream>
 
+void Shader::use()
+{
+    glUseProgram(this->shader_program);
+}
+
 std::string Shader::readShaderSource(const std::string &filePath)
 {
-    std::ifstream file(filePath);
-    std::stringstream buffer;
-    buffer << file.rdbuf();
-    return buffer.str();
+    std::string shaderCode;
+    std::ifstream shaderFile;
+
+    shaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+    try
+    {
+        shaderFile.open(filePath);
+        std::stringstream shaderStream;
+        shaderStream << shaderFile.rdbuf();
+        shaderFile.close();
+        shaderCode = shaderStream.str();
+    }
+    catch (std::ifstream::failure &e)
+    {
+        std::cerr << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ" << std::endl;
+    }
+    return shaderCode;
 }
 
 GLuint Shader::compileShader(GLenum type, const std::string &source)
 {
-    GLuint shader = glCreateShader(type);
     const char *src = source.c_str();
-    glShaderSource(shader, 1, &src, nullptr);
+
+    GLuint shader = glCreateShader(type);
+    glShaderSource(shader, 1, &src, NULL);
     glCompileShader(shader);
 
     // Check for compilation errors
