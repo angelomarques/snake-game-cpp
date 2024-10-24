@@ -85,8 +85,8 @@ GLuint Shader::get_shader_program()
 
 Shader::Shader(std::string vertex_shader_source_path, std::string fragment_shader_source_path)
 {
-    std::string vertexShaderSource = this->readShaderSource("src/shaders/vertex_shader.glsl");
-    std::string fragmentShaderSource = this->readShaderSource("src/shaders/fragment_shader.glsl");
+    std::string vertexShaderSource = this->readShaderSource(vertex_shader_source_path);
+    std::string fragmentShaderSource = this->readShaderSource(fragment_shader_source_path);
     this->shader_program = this->createShaderProgram(vertexShaderSource, fragmentShaderSource);
 }
 

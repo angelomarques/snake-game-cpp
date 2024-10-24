@@ -266,7 +266,7 @@ int main()
     // OpenGL viewport initial settings
     glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-    // Game game(window);
+    Game game(window);
 
     // Initialize FreeType
     initFreeType("src/fonts/arial/regular.ttf");
@@ -274,26 +274,27 @@ int main()
     // Initialize OpenGL state for text rendering
     initOpenGL();
 
-    // Shader text_shader("src/shaders/text_vertex_shader.glsl", "src/shaders/text_fragment_shader.glsl");
     // Create shader program
-    GLuint shaderProgram = createShaderProgram("src/shaders/text_vertex_shader.glsl", "src/shaders/text_fragment_shader.glsl");
-
-    // Setup projection matrix
-    glm::mat4 projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f);
-    glUseProgram(shaderProgram);
-    glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+    Shader text_shader("src/shaders/text_vertex_shader.glsl", "src/shaders/text_fragment_shader.glsl");
 
     // Main render loop
     while (!glfwWindowShouldClose(window))
     {
-        // game.render();
-        // // Clear the screen
+        // Clear the screen
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        game.render();
+
+        text_shader.use();
+
+        // Setup projection matrix
+        glm::mat4 projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f);
+        glUniformMatrix4fv(glGetUniformLocation(text_shader.get_shader_program(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+
         // Render text
-        RenderText(shaderProgram, "Hello OpenGL!", 25.0f, 550.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
-        RenderText(shaderProgram, "This is FreeType", 25.0f, 500.0f, 0.5f, glm::vec3(0.3, 0.7f, 0.9f));
+        RenderText(text_shader.get_shader_program(), "Hello OpenGL!", 25.0f, 550.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+        RenderText(text_shader.get_shader_program(), "This is FreeType", 25.0f, 500.0f, 0.5f, glm::vec3(0.3, 0.7f, 0.9f));
 
         // Swap buffers (display the rendered frame)
         glfwSwapBuffers(window);
