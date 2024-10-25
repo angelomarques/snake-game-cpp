@@ -11,7 +11,7 @@
 #include <fstream>
 #include <sstream>
 #include <map>
-#include "text.cpp"
+#include "text.hpp"
 
 std::map<GLchar, Character> Characters;
 
@@ -212,7 +212,7 @@ int main()
         text_shader.use();
 
         // Setup projection matrix
-        glm::mat4 projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f);
+        glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(SCREEN_WIDTH), 0.0f, static_cast<float>(SCREEN_HEIGHT));
         glUniformMatrix4fv(glGetUniformLocation(text_shader.get_shader_program(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
         // Render text
