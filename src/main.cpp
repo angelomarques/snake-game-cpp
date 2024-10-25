@@ -11,17 +11,7 @@
 #include <fstream>
 #include <sstream>
 #include <map>
-
-// Global variables
-GLuint textVAO, textVBO;
-
-struct Character
-{
-    GLuint textureID;   // ID handle of the glyph texture
-    glm::ivec2 size;    // Size of the glyph
-    glm::ivec2 bearing; // Offset from baseline to left/top of glyph
-    GLuint advance;     // Horizontal offset to advance to next glyph
-};
+#include "text.cpp"
 
 std::map<GLchar, Character> Characters;
 
@@ -81,72 +71,6 @@ void initFreeType(const char *fontPath)
 
     FT_Done_Face(face);
     FT_Done_FreeType(ft);
-}
-
-void initOpenGL()
-{
-    // OpenGL state
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    // Configure VAO/VBO for texture quads
-    glGenVertexArrays(1, &textVAO);
-    glGenBuffers(1, &textVBO);
-    glBindVertexArray(textVAO);
-    glBindBuffer(GL_ARRAY_BUFFER, textVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
-}
-
-void RenderText(GLuint shaderProgram, std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color)
-{
-    // Activate shader
-    glUseProgram(shaderProgram);
-    glUniform3f(glGetUniformLocation(shaderProgram, "textColor"), color.x, color.y, color.z);
-    glActiveTexture(GL_TEXTURE0);
-    glBindVertexArray(textVAO);
-
-    // Iterate through all characters
-    std::string::const_iterator c;
-    for (c = text.begin(); c != text.end(); c++)
-    {
-        Character ch = Characters[*c];
-
-        GLfloat xpos = x + ch.bearing.x * scale;
-        GLfloat ypos = y - (ch.size.y - ch.bearing.y) * scale;
-
-        GLfloat w = ch.size.x * scale;
-        GLfloat h = ch.size.y * scale;
-
-        // Update VBO for each character
-        GLfloat vertices[6][4] = {
-            {xpos, ypos + h, 0.0f, 0.0f},
-            {xpos, ypos, 0.0f, 1.0f},
-            {xpos + w, ypos, 1.0f, 1.0f},
-
-            {xpos, ypos + h, 0.0f, 0.0f},
-            {xpos + w, ypos, 1.0f, 1.0f},
-            {xpos + w, ypos + h, 1.0f, 0.0f}};
-
-        // Render glyph texture over quad
-        glBindTexture(GL_TEXTURE_2D, ch.textureID);
-
-        // Update content of VBO memory
-        glBindBuffer(GL_ARRAY_BUFFER, textVBO);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
-
-        // Render quad
-        glDrawArrays(GL_TRIANGLES, 0, 6);
-
-        // Advance cursors for next glyph
-        x += (ch.advance >> 6) * scale; // Bitshift by 6 to get value in pixels
-    }
-
-    glBindVertexArray(0);
-    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 // Function to handle resizing of the window
@@ -271,11 +195,10 @@ int main()
     // Initialize FreeType
     initFreeType("src/fonts/arial/regular.ttf");
 
-    // Initialize OpenGL state for text rendering
-    initOpenGL();
-
     // Create shader program
     Shader text_shader("src/shaders/text_vertex_shader.glsl", "src/shaders/text_fragment_shader.glsl");
+
+    Text my_text(text_shader.get_shader_program(), Characters);
 
     // Main render loop
     while (!glfwWindowShouldClose(window))
@@ -293,8 +216,7 @@ int main()
         glUniformMatrix4fv(glGetUniformLocation(text_shader.get_shader_program(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
         // Render text
-        RenderText(text_shader.get_shader_program(), "Hello OpenGL!", 25.0f, 550.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
-        RenderText(text_shader.get_shader_program(), "This is FreeType", 25.0f, 500.0f, 0.5f, glm::vec3(0.3, 0.7f, 0.9f));
+        my_text.render("This is from the class", 25.0f, 500.0f, 0.5f, glm::vec3(0.3, 0.7f, 0.9f));
 
         // Swap buffers (display the rendered frame)
         glfwSwapBuffers(window);
