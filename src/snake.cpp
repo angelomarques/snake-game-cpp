@@ -676,7 +676,7 @@ void Snake::delete_snake()
     this->apple = nullptr;
 }
 
-Snake::Snake(GLFWwindow *window, float tile_size) : window(window), play(false), speed(0.005f), current_tile_position(0.0f), current_direction(SNAKE_DIRECTION_LEFT), initial_tile_count(5), tile_size(tile_size), head_tile(nullptr), apple(nullptr), available_grids(Dimensions::get_grid_coordinate_pairs())
+Snake::Snake(GLFWwindow *window, float tile_size) : window(window), play(false), speed(0.02f), current_tile_position(0.0f), current_direction(SNAKE_DIRECTION_LEFT), initial_tile_count(3), tile_size(tile_size), head_tile(nullptr), apple(nullptr), available_grids(Dimensions::get_grid_coordinate_pairs())
 {
     this->create_initial_snake();
 

@@ -11,7 +11,7 @@ glm::vec3 Colors::black = glm::vec3(0.1f, 0.1f, 0.1f);
 
 Dimensions::Dimensions() {}
 
-int Dimensions::grid_axis_count = 20;
+int Dimensions::grid_axis_count = 10;
 float Dimensions::total_width = 2.0f;
 float Dimensions::total_height = 2.0f;
 
