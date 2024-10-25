@@ -1,12 +1,10 @@
-#include "shader.hpp"
 #include "game.hpp"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 #include "text.hpp"
+#include "constants.hpp"
 
 // Function to handle resizing of the window
 void framebuffer_size_callback(GLFWwindow *window, int width, int height)
@@ -16,9 +14,6 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height)
 
 int main()
 {
-    const GLint SCREEN_WIDTH = 1000;
-    const GLint SCREEN_HEIGHT = 1000;
-
     // Initialize GLFW library
     if (!glfwInit())
     {
@@ -32,7 +27,7 @@ int main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     // Create a GLFW window
-    GLFWwindow *window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "OpenGL Square", NULL, NULL);
+    GLFWwindow *window = glfwCreateWindow(Dimensions::screen_width, Dimensions::screen_height, "OpenGL Square", NULL, NULL);
     if (!window)
     {
         std::cerr << "Failed to create window!" << std::endl;
@@ -55,14 +50,11 @@ int main()
     }
 
     // OpenGL viewport initial settings
-    glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    glViewport(0, 0, Dimensions::screen_width, Dimensions::screen_height);
 
     Game game(window);
 
-    // Create shader program
-    Shader text_shader("src/shaders/text_vertex_shader.glsl", "src/shaders/text_fragment_shader.glsl");
-
-    Text my_text(text_shader.get_shader_program());
+    Text my_text;
 
     // Main render loop
     while (!glfwWindowShouldClose(window))
@@ -73,14 +65,11 @@ int main()
 
         game.render();
 
-        text_shader.use();
-
-        // Setup projection matrix
-        glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(SCREEN_WIDTH), 0.0f, static_cast<float>(SCREEN_HEIGHT));
-        glUniformMatrix4fv(glGetUniformLocation(text_shader.get_shader_program(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+        my_text.use();
 
         // Render text
         my_text.render("This is from the class", 25.0f, 500.0f, 0.5f, glm::vec3(0.3, 0.7f, 0.9f));
+        my_text.render("This is from the class too", 25.0f, 570.0f, 0.5f, glm::vec3(0.3, 0.7f, 0.9f));
 
         // Swap buffers (display the rendered frame)
         glfwSwapBuffers(window);

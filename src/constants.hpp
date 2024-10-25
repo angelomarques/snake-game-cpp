@@ -29,6 +29,9 @@ public:
     static float positive_border_coordinate;
     static float negative_border_coordinate;
 
+    static int screen_width;
+    static int screen_height;
+
     static std::vector<std::vector<int>> get_grid_coordinate_pairs();
 };
 

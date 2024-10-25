@@ -7,6 +7,10 @@
 #include <map>
 #include <ft2build.h>
 #include FT_FREETYPE_H
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include "shader.hpp"
+#include "constants.hpp"
 
 struct Character
 {
@@ -19,17 +23,19 @@ struct Character
 class Text
 {
 private:
-    GLuint shader_program;
     GLuint VAO, VBO;
+    Shader shader;
 
     std::map<GLchar, Character> Characters;
 
     void initFreeType(const char *font_path);
 
 public:
-    Text(GLuint shader_program);
+    Text();
 
     void render(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);
+
+    void use();
 };
 
 #endif // TEXT_HPP

@@ -18,6 +18,9 @@ float Dimensions::total_height = 2.0f;
 float Dimensions::positive_border_coordinate = 1.0f;
 float Dimensions::negative_border_coordinate = -1.0f;
 
+int Dimensions::screen_width = 1000;
+int Dimensions::screen_height = 1000;
+
 std::vector<std::vector<int>> Dimensions::get_grid_coordinate_pairs()
 {
     std::vector<std::vector<int>> res;

@@ -1,6 +1,6 @@
 #include "text.hpp"
 
-Text::Text(GLuint shader_program) : shader_program(shader_program)
+Text::Text() : shader("src/shaders/text_vertex_shader.glsl", "src/shaders/text_fragment_shader.glsl")
 {
     // Initialize FreeType
     initFreeType("src/fonts/arial/regular.ttf");
@@ -19,6 +19,15 @@ Text::Text(GLuint shader_program) : shader_program(shader_program)
     glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
+}
+
+void Text::use()
+{
+    this->shader.use();
+
+    // Setup projection matrix
+    glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(Dimensions::screen_width), 0.0f, static_cast<float>(Dimensions::screen_width));
+    glUniformMatrix4fv(glGetUniformLocation(this->shader.get_shader_program(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 }
 
 void Text::initFreeType(const char *font_path)
@@ -82,8 +91,8 @@ void Text::initFreeType(const char *font_path)
 void Text::render(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color)
 {
     // Activate shader
-    glUseProgram(this->shader_program);
-    glUniform3f(glGetUniformLocation(this->shader_program, "textColor"), color.x, color.y, color.z);
+    glUseProgram(this->shader.get_shader_program());
+    glUniform3f(glGetUniformLocation(this->shader.get_shader_program(), "textColor"), color.x, color.y, color.z);
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(this->VAO);
 
