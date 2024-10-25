@@ -5,6 +5,8 @@
 #include <glm/glm.hpp>
 #include <iostream>
 #include <map>
+#include <ft2build.h>
+#include FT_FREETYPE_H
 
 struct Character
 {
@@ -22,8 +24,10 @@ private:
 
     std::map<GLchar, Character> Characters;
 
+    void initFreeType(const char *font_path);
+
 public:
-    Text(GLuint shader_program, std::map<GLchar, Character> Characters);
+    Text(GLuint shader_program);
 
     void render(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);
 };
