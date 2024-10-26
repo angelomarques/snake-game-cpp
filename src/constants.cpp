@@ -2,12 +2,12 @@
 
 Colors::Colors() {}
 
-glm::vec3 Colors::light_gray = glm::vec3(0.8f, 0.8f, 0.8f);
-glm::vec3 Colors::medium_gray = glm::vec3(0.5f, 0.5f, 0.5f);
-glm::vec3 Colors::dark_gray = glm::vec3(0.3f, 0.3f, 0.3f);
-glm::vec3 Colors::green = glm::vec3(0.3f, 1.0f, 0.3f);
-glm::vec3 Colors::red = glm::vec3(0.9f, 0.2f, 0.2f);
-glm::vec3 Colors::black = glm::vec3(0.1f, 0.1f, 0.1f);
+glm::vec4 Colors::light_gray = glm::vec4(0.8f, 0.8f, 0.8f, 1.0f);
+glm::vec4 Colors::medium_gray = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
+glm::vec4 Colors::dark_gray = glm::vec4(0.3f, 0.3f, 0.3f, 1.0f);
+glm::vec4 Colors::green = glm::vec4(0.3f, 1.0f, 0.3f, 1.0f);
+glm::vec4 Colors::red = glm::vec4(0.9f, 0.2f, 0.2f, 1.0f);
+glm::vec4 Colors::black = glm::vec4(0.1f, 0.1f, 0.1f, 1.0f);
 
 Dimensions::Dimensions() {}
 

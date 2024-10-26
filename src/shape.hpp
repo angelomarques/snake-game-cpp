@@ -14,11 +14,11 @@ private:
     std::string name;
 
 protected:
-    glm::vec3 color;
+    glm::vec4 color;
 
 public:
     // Constructor
-    Shape(const std::string &name, const glm::vec3 &color);
+    Shape(const std::string &name, const glm::vec4 &color);
 
     virtual void draw(GLuint shaderProgram, GLuint VAO) const = 0;
 
@@ -32,7 +32,7 @@ class Rectangle : public Shape
 public:
     glm::vec2 position;
 
-    Rectangle(const glm::vec2 &position, const glm::vec2 &size, const glm::vec3 &color);
+    Rectangle(const glm::vec2 &position, const glm::vec2 &size, const glm::vec4 &color);
 
     void draw(GLuint shaderProgram, GLuint VAO) const override;
 

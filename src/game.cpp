@@ -36,6 +36,10 @@ Game::Game(GLFWwindow *window) : window(window), main_layout(Dimensions::grid_ax
         2, 3, 0, // Second triangle
     };
 
+    // Enable blending for transparency
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     // Create VAO, VBO, and EBO
     glGenVertexArrays(1, &this->VAO);
     glGenBuffers(1, &this->VBO);

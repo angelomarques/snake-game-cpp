@@ -12,7 +12,7 @@ class GridLayout
     int horizontal, vertical;
     float line_width;
 
-    glm::vec3 line_color;
+    glm::vec4 line_color;
 
 public:
     GridLayout(int horizontal, int vertical);

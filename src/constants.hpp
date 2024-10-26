@@ -9,12 +9,12 @@ class Colors
 public:
     Colors();
 
-    static glm::vec3 light_gray;
-    static glm::vec3 medium_gray;
-    static glm::vec3 dark_gray;
-    static glm::vec3 green;
-    static glm::vec3 red;
-    static glm::vec3 black;
+    static glm::vec4 light_gray;
+    static glm::vec4 medium_gray;
+    static glm::vec4 dark_gray;
+    static glm::vec4 green;
+    static glm::vec4 red;
+    static glm::vec4 black;
 };
 
 class Dimensions
