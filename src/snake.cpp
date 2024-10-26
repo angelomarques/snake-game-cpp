@@ -343,6 +343,11 @@ std::vector<int> SnakeTile::get_grid_reference(glm::vec2 coordinates)
     return res;
 }
 
+void Snake::play()
+{
+    this->is_playing = true;
+}
+
 void Snake::set_new_apple()
 {
     glm::vec2 new_tile_position(this->head_tile->get_x_position(), this->head_tile->get_y_position());
@@ -509,7 +514,7 @@ void Snake::draw(GLuint shaderProgram, GLuint VAO)
     SnakeTile *last_tile = current; // The last tile is actually the "head" of the snake
     SnakeTile *snake_tail_tile = this->head_tile;
 
-    if (this->play == true)
+    if (this->is_playing)
     {
         this->current_tile_position += speed;
     }
@@ -565,13 +570,13 @@ void Snake::draw(GLuint shaderProgram, GLuint VAO)
 
         if (this->check_snake_collision(last_tile))
         {
-            this->play = false;
+            this->is_playing = false;
         }
 
         if (this->check_border_collision(last_tile))
         {
             // GAME OVER!!!
-            this->play = false;
+            this->is_playing = false;
         }
 
         if (this->check_apple_collision(last_tile))
@@ -594,22 +599,6 @@ void Snake::draw(GLuint shaderProgram, GLuint VAO)
 
 void Snake::processInput()
 {
-    if (glfwGetKey(this->window, GLFW_KEY_SPACE) == GLFW_PRESS)
-    {
-        // The SPACE is treated as "play" button
-        this->play = true;
-    }
-    if (glfwGetKey(this->window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-    {
-        // The SPACE is treated as "play" button
-        this->play = false;
-    }
-
-    if (glfwGetKey(this->window, GLFW_KEY_R) == GLFW_PRESS)
-    {
-        this->reset();
-    }
-
     if (this->head_tile != nullptr)
     {
         if (glfwGetKey(this->window, GLFW_KEY_LEFT) == GLFW_PRESS)
@@ -676,7 +665,7 @@ void Snake::delete_snake()
     this->apple = nullptr;
 }
 
-Snake::Snake(GLFWwindow *window, float tile_size) : window(window), play(false), speed(0.02f), current_tile_position(0.0f), current_direction(SNAKE_DIRECTION_LEFT), initial_tile_count(3), tile_size(tile_size), head_tile(nullptr), apple(nullptr), available_grids(Dimensions::get_grid_coordinate_pairs())
+Snake::Snake(GLFWwindow *window, float tile_size) : window(window), is_playing(false), speed(0.02f), current_tile_position(0.0f), current_direction(SNAKE_DIRECTION_LEFT), initial_tile_count(3), tile_size(tile_size), head_tile(nullptr), apple(nullptr), available_grids(Dimensions::get_grid_coordinate_pairs())
 {
     this->create_initial_snake();
 

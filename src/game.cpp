@@ -3,9 +3,20 @@
 #include "constants.hpp"
 #include <iostream>
 
+void Game::processInput()
+{
+    this->snake.processInput();
+
+    if (glfwGetKey(this->window, GLFW_KEY_ENTER) == GLFW_PRESS)
+    {
+        // The SPACE is treated as "play" button
+        this->snake.play();
+        this->info_screen->hide();
+    }
+}
+
 void Game::render()
 {
-
     // Clear the screen with a black color
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -15,7 +26,7 @@ void Game::render()
 
     main_layout.draw(this->shader.get_shader_program(), VAO);
 
-    this->snake.processInput();
+    this->processInput();
     snake.draw(this->shader.get_shader_program(), this->VAO);
 
     if (this->info_screen != nullptr)
@@ -80,13 +91,16 @@ Game::~Game()
     glDeleteBuffers(1, &this->EBO);
 }
 
-InfoScreen::InfoScreen(GLuint VAO, GLuint main_shader_program) : VAO(VAO), main_shader_program(main_shader_program), overlay(nullptr)
+InfoScreen::InfoScreen(GLuint VAO, GLuint main_shader_program) : VAO(VAO), main_shader_program(main_shader_program), overlay(nullptr), hidden(false)
 {
     overlay = new Rectangle(glm::vec2(0.0f, 0.0f), glm::vec2(Dimensions::total_width, Dimensions::total_height), Colors::black_transparent);
 }
 
 void InfoScreen::draw()
 {
+    if (hidden)
+        return;
+
     if (this->overlay != nullptr)
     {
         this->overlay->draw(this->main_shader_program, this->VAO);
@@ -95,6 +109,16 @@ void InfoScreen::draw()
     this->text_context.use();
 
     // Render text
-    this->text_context.render("WELCOME", 25.0f, 500.0f, 0.5f, glm::vec3(0.9f, 0.8f, 0.8f));
-    this->text_context.render("This is from the class too", 25.0f, 570.0f, 0.5f, glm::vec3(0.3, 0.7f, 0.9f));
+    this->text_context.render(
+        "SNAKE GAME IN C++",
+        static_cast<float>(Dimensions::screen_width / 2) - 250.0f,
+        static_cast<float>(Dimensions::screen_height / 2) + 120.0f,
+        1.0f,
+        Colors::white);
+    this->text_context.render("Press enter to start the game", static_cast<float>(Dimensions::screen_width / 2) - 180.0f, 570.0f, 0.5f, Colors::white);
+}
+
+void InfoScreen::hide()
+{
+    this->hidden = true;
 }

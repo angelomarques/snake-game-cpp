@@ -33,7 +33,7 @@ private:
 public:
     Text();
 
-    void render(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);
+    void render(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec4 color);
 
     void use();
 };

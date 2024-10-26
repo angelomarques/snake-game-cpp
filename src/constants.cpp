@@ -9,6 +9,7 @@ glm::vec4 Colors::green = glm::vec4(0.3f, 1.0f, 0.3f, 1.0f);
 glm::vec4 Colors::red = glm::vec4(0.9f, 0.2f, 0.2f, 1.0f);
 glm::vec4 Colors::black = glm::vec4(0.1f, 0.1f, 0.1f, 1.0f);
 glm::vec4 Colors::black_transparent = glm::vec4(0.1f, 0.1f, 0.1f, 0.9f);
+glm::vec4 Colors::white = glm::vec4(0.9f, 0.8f, 0.8f, 1.0f);
 
 Dimensions::Dimensions() {}
 

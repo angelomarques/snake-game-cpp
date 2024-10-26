@@ -16,6 +16,7 @@ public:
     static glm::vec4 red;
     static glm::vec4 black;
     static glm::vec4 black_transparent;
+    static glm::vec4 white;
 };
 
 class Dimensions

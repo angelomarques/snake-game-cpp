@@ -88,7 +88,7 @@ void Text::initFreeType(const char *font_path)
     FT_Done_FreeType(ft);
 }
 
-void Text::render(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color)
+void Text::render(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec4 color)
 {
     // Activate shader
     glUseProgram(this->shader.get_shader_program());

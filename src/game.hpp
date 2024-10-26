@@ -17,11 +17,14 @@ private:
     GLuint main_shader_program;
     Text text_context;
     Rectangle *overlay;
+    bool hidden;
 
 public:
     InfoScreen(GLuint VAO, GLuint main_shader_program);
 
     void draw();
+
+    void hide();
 };
 
 class Game
@@ -37,6 +40,8 @@ private:
     std::string name;
 
     InfoScreen *info_screen;
+
+    void processInput();
 
 public:
     Game(GLFWwindow *window);

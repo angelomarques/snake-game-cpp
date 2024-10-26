@@ -78,7 +78,7 @@ public:
 class Snake
 {
     GLFWwindow *window;
-    bool play;
+    bool is_playing;
     float speed;
     float current_tile_position;
     int current_direction;
@@ -123,6 +123,8 @@ public:
     void draw(GLuint shaderProgram, GLuint VAO);
 
     void processInput();
+
+    void play();
 
     ~Snake();
 };
