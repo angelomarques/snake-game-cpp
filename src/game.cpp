@@ -17,9 +17,14 @@ void Game::render()
 
     this->snake.processInput();
     snake.draw(this->shader.get_shader_program(), this->VAO);
+
+    if (this->info_screen != nullptr)
+    {
+        this->info_screen->draw();
+    }
 }
 
-Game::Game(GLFWwindow *window) : window(window), main_layout(Dimensions::grid_axis_count, Dimensions::grid_axis_count), snake(window, Dimensions::total_width / Dimensions::grid_axis_count), shader("src/shaders/vertex_shader.glsl", "src/shaders/fragment_shader.glsl"), pos_x(0.0f), pos_y(0.0f)
+Game::Game(GLFWwindow *window) : window(window), main_layout(Dimensions::grid_axis_count, Dimensions::grid_axis_count), snake(window, Dimensions::total_width / Dimensions::grid_axis_count), shader("src/shaders/vertex_shader.glsl", "src/shaders/fragment_shader.glsl"), info_screen(nullptr)
 {
     // Define square vertices (two triangles to form a square)
     float vertices[] = {
@@ -64,7 +69,7 @@ Game::Game(GLFWwindow *window) : window(window), main_layout(Dimensions::grid_ax
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-    this->rectangles = {};
+    this->info_screen = new InfoScreen(this->VAO, this->shader.get_shader_program());
 }
 
 Game::~Game()
@@ -73,4 +78,23 @@ Game::~Game()
     glDeleteVertexArrays(1, &this->VAO);
     glDeleteBuffers(1, &this->VBO);
     glDeleteBuffers(1, &this->EBO);
+}
+
+InfoScreen::InfoScreen(GLuint VAO, GLuint main_shader_program) : VAO(VAO), main_shader_program(main_shader_program), overlay(nullptr)
+{
+    overlay = new Rectangle(glm::vec2(0.0f, 0.0f), glm::vec2(Dimensions::total_width, Dimensions::total_height), Colors::black_transparent);
+}
+
+void InfoScreen::draw()
+{
+    if (this->overlay != nullptr)
+    {
+        this->overlay->draw(this->main_shader_program, this->VAO);
+    }
+
+    this->text_context.use();
+
+    // Render text
+    this->text_context.render("WELCOME", 25.0f, 500.0f, 0.5f, glm::vec3(0.9f, 0.8f, 0.8f));
+    this->text_context.render("This is from the class too", 25.0f, 570.0f, 0.5f, glm::vec3(0.3, 0.7f, 0.9f));
 }

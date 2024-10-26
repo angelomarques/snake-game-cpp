@@ -3,7 +3,7 @@
 Text::Text() : shader("src/shaders/text_vertex_shader.glsl", "src/shaders/text_fragment_shader.glsl")
 {
     // Initialize FreeType
-    initFreeType("src/fonts/arial/regular.ttf");
+    initFreeType("src/fonts/arial/bold.ttf");
 
     // OpenGL state
     glEnable(GL_BLEND);

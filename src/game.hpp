@@ -8,6 +8,21 @@
 #include "shape.hpp"
 #include "layout.hpp"
 #include "snake.hpp"
+#include "text.hpp"
+
+class InfoScreen
+{
+private:
+    GLuint VAO;
+    GLuint main_shader_program;
+    Text text_context;
+    Rectangle *overlay;
+
+public:
+    InfoScreen(GLuint VAO, GLuint main_shader_program);
+
+    void draw();
+};
 
 class Game
 {
@@ -21,11 +36,7 @@ private:
     Shader shader;
     std::string name;
 
-    float pos_x, pos_y;
-
-    std::vector<Rectangle> rectangles; // Vector to store rectangles
-
-    int selectedRect = -1; // Track which rectangle is selected
+    InfoScreen *info_screen;
 
 public:
     Game(GLFWwindow *window);

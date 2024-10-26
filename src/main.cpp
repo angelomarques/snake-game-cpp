@@ -3,7 +3,6 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <iostream>
-#include "text.hpp"
 #include "constants.hpp"
 
 // Function to handle resizing of the window
@@ -54,8 +53,6 @@ int main()
 
     Game game(window);
 
-    Text my_text;
-
     // Main render loop
     while (!glfwWindowShouldClose(window))
     {
@@ -64,12 +61,6 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);
 
         game.render();
-
-        my_text.use();
-
-        // Render text
-        my_text.render("This is from the class", 25.0f, 500.0f, 0.5f, glm::vec3(0.3, 0.7f, 0.9f));
-        my_text.render("This is from the class too", 25.0f, 570.0f, 0.5f, glm::vec3(0.3, 0.7f, 0.9f));
 
         // Swap buffers (display the rendered frame)
         glfwSwapBuffers(window);
