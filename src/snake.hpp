@@ -79,6 +79,7 @@ class Snake
 {
     GLFWwindow *window;
     bool is_playing;
+    bool is_game_over;
     float speed;
     float current_tile_position;
     int current_direction;
@@ -125,6 +126,7 @@ public:
     void processInput();
 
     void play();
+    bool get_is_game_over();
 
     ~Snake();
 };

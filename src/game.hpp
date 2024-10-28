@@ -19,12 +19,24 @@ private:
     Rectangle *overlay;
     bool hidden;
 
+    std::string title;
+    std::string subtitle;
+
+    float title_x;
+    float title_y;
+
+    float subtitle_x;
+    float subtitle_y;
+
 public:
     InfoScreen(GLuint VAO, GLuint main_shader_program);
+    ~InfoScreen();
 
     void draw();
 
     void hide();
+
+    void set_game_over();
 };
 
 class Game

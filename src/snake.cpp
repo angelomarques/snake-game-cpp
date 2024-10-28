@@ -343,6 +343,11 @@ std::vector<int> SnakeTile::get_grid_reference(glm::vec2 coordinates)
     return res;
 }
 
+bool Snake::get_is_game_over()
+{
+    return this->is_game_over;
+}
+
 void Snake::play()
 {
     this->is_playing = true;
@@ -571,12 +576,14 @@ void Snake::draw(GLuint shaderProgram, GLuint VAO)
         if (this->check_snake_collision(last_tile))
         {
             this->is_playing = false;
+            this->is_game_over = true;
         }
 
         if (this->check_border_collision(last_tile))
         {
             // GAME OVER!!!
             this->is_playing = false;
+            this->is_game_over = true;
         }
 
         if (this->check_apple_collision(last_tile))
@@ -665,7 +672,7 @@ void Snake::delete_snake()
     this->apple = nullptr;
 }
 
-Snake::Snake(GLFWwindow *window, float tile_size) : window(window), is_playing(false), speed(0.02f), current_tile_position(0.0f), current_direction(SNAKE_DIRECTION_LEFT), initial_tile_count(3), tile_size(tile_size), head_tile(nullptr), apple(nullptr), available_grids(Dimensions::get_grid_coordinate_pairs())
+Snake::Snake(GLFWwindow *window, float tile_size) : window(window), is_playing(false), is_game_over(false), speed(0.02f), current_tile_position(0.0f), current_direction(SNAKE_DIRECTION_LEFT), initial_tile_count(3), tile_size(tile_size), head_tile(nullptr), apple(nullptr), available_grids(Dimensions::get_grid_coordinate_pairs())
 {
     this->create_initial_snake();
 

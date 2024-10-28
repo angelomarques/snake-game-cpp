@@ -7,11 +7,16 @@ void Game::processInput()
 {
     this->snake.processInput();
 
-    if (glfwGetKey(this->window, GLFW_KEY_ENTER) == GLFW_PRESS)
+    if (glfwGetKey(this->window, GLFW_KEY_ENTER) == GLFW_PRESS && !this->snake.get_is_game_over())
     {
         // The SPACE is treated as "play" button
         this->snake.play();
         this->info_screen->hide();
+    }
+
+    if (this->snake.get_is_game_over())
+    {
+        this->info_screen->set_game_over();
     }
 }
 
@@ -89,11 +94,18 @@ Game::~Game()
     glDeleteVertexArrays(1, &this->VAO);
     glDeleteBuffers(1, &this->VBO);
     glDeleteBuffers(1, &this->EBO);
+
+    delete this->info_screen;
 }
 
-InfoScreen::InfoScreen(GLuint VAO, GLuint main_shader_program) : VAO(VAO), main_shader_program(main_shader_program), overlay(nullptr), hidden(false)
+InfoScreen::InfoScreen(GLuint VAO, GLuint main_shader_program) : VAO(VAO), main_shader_program(main_shader_program), overlay(nullptr), hidden(false), title("SNAKE GAME IN C++"), subtitle("Press enter to start the game"), title_x(static_cast<float>(Dimensions::screen_width / 2) - 250.0f), title_y(static_cast<float>(Dimensions::screen_height / 2) + 120.0f), subtitle_x(static_cast<float>(Dimensions::screen_width / 2) - 180.0f), subtitle_y(570.0f)
 {
     overlay = new Rectangle(glm::vec2(0.0f, 0.0f), glm::vec2(Dimensions::total_width, Dimensions::total_height), Colors::black_transparent);
+}
+
+InfoScreen::~InfoScreen()
+{
+    delete this->overlay;
 }
 
 void InfoScreen::draw()
@@ -110,15 +122,26 @@ void InfoScreen::draw()
 
     // Render text
     this->text_context.render(
-        "SNAKE GAME IN C++",
-        static_cast<float>(Dimensions::screen_width / 2) - 250.0f,
-        static_cast<float>(Dimensions::screen_height / 2) + 120.0f,
+        this->title,
+        this->title_x,
+        this->title_y,
         1.0f,
         Colors::white);
-    this->text_context.render("Press enter to start the game", static_cast<float>(Dimensions::screen_width / 2) - 180.0f, 570.0f, 0.5f, Colors::white);
+    this->text_context.render(this->subtitle, this->subtitle_x, this->subtitle_y, 0.5f, Colors::white);
 }
 
 void InfoScreen::hide()
 {
     this->hidden = true;
+}
+
+void InfoScreen::set_game_over()
+{
+    this->title = "GAME OVER";
+    this->title_x = static_cast<float>(Dimensions::screen_width / 2) - 155.0f;
+
+    this->subtitle = "Press enter to restart the game";
+    this->subtitle_x = static_cast<float>(Dimensions::screen_width / 2) - 175.0f;
+
+    this->hidden = false;
 }
