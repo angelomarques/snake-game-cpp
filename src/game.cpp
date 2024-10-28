@@ -7,11 +7,20 @@ void Game::processInput()
 {
     this->snake.processInput();
 
-    if (glfwGetKey(this->window, GLFW_KEY_ENTER) == GLFW_PRESS && !this->snake.get_is_game_over())
+    if (glfwGetKey(this->window, GLFW_KEY_ENTER) == GLFW_PRESS)
     {
-        // The SPACE is treated as "play" button
-        this->snake.play();
-        this->info_screen->hide();
+        if (this->snake.get_is_game_over())
+        {
+            // The SPACE is treated as "reset" button
+            this->snake.reset();
+            this->info_screen->hide();
+        }
+        else
+        {
+            // The SPACE is treated as "play" button
+            this->snake.play();
+            this->info_screen->hide();
+        }
     }
 
     if (this->snake.get_is_game_over())

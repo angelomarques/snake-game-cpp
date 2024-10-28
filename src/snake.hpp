@@ -93,8 +93,6 @@ class Snake
 
     std::vector<std::vector<int>> available_grids;
 
-    void reset();
-
     void insert_tile(SnakeTile *tile);
 
     void create_initial_snake();
@@ -127,6 +125,8 @@ public:
 
     void play();
     bool get_is_game_over();
+
+    void reset();
 
     ~Snake();
 };

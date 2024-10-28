@@ -511,6 +511,19 @@ void Snake::reset()
 {
     this->delete_snake();
     this->create_initial_snake();
+
+    const std::vector<int> available_random_grid_pair = this->get_random_available_grid();
+
+    glm::vec2 apple_coordinates = this->get_coordinates(available_random_grid_pair[0], available_random_grid_pair[1]);
+    glm::vec2 apple_size(this->tile_size, this->tile_height);
+
+    Rectangle *apple_rectangle = new Rectangle(apple_coordinates, apple_size, Colors::red);
+    this->apple = new SnakeTile(apple_rectangle, this->tile_size, this->tile_height);
+    this->apple->set_has_borders(false);
+
+    this->is_playing = true;
+    this->is_game_over = false;
+    this->current_direction = SNAKE_DIRECTION_LEFT;
 }
 
 void Snake::draw(GLuint shaderProgram, GLuint VAO)
