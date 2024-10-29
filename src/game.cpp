@@ -3,6 +3,8 @@
 #include "constants.hpp"
 #include <iostream>
 
+InfoScreenText::InfoScreenText(std::string title, std::string subtitle, float title_x, float title_y, float subtitle_x, float subtitle_y) : title(title), subtitle(subtitle), title_x(title_x), title_y(title_y), subtitle_x(subtitle_x), subtitle_y(subtitle_y) {}
+
 void Game::processInput()
 {
     this->snake.processInput();
@@ -107,9 +109,27 @@ Game::~Game()
     delete this->info_screen;
 }
 
-InfoScreen::InfoScreen(GLuint VAO, GLuint main_shader_program) : VAO(VAO), main_shader_program(main_shader_program), overlay(nullptr), hidden(false), title("SNAKE GAME IN C++"), subtitle("Press enter to start the game"), title_x(static_cast<float>(Dimensions::screen_width / 2) - 250.0f), title_y(static_cast<float>(Dimensions::screen_height / 2) + 120.0f), subtitle_x(static_cast<float>(Dimensions::screen_width / 2) - 180.0f), subtitle_y(570.0f)
+InfoScreen::InfoScreen(GLuint VAO, GLuint main_shader_program) : VAO(VAO), main_shader_program(main_shader_program), overlay(nullptr), hidden(false), text_type(InfoScreenTextType::Welcome)
 {
     overlay = new Rectangle(glm::vec2(0.0f, 0.0f), glm::vec2(Dimensions::total_width, Dimensions::total_height), Colors::black_transparent);
+
+    this->texts = {
+        {InfoScreenTextType::Welcome, InfoScreenText(
+                                          "SNAKE GAME IN C++",
+                                          "Press enter to start the game",
+                                          static_cast<float>(Dimensions::screen_width / 2) - 250.0f,
+                                          static_cast<float>(Dimensions::screen_height / 2) + 120.0f,
+                                          static_cast<float>(Dimensions::screen_width / 2) - 180.0f,
+                                          570.0f)},
+        {InfoScreenTextType::GameOver, InfoScreenText(
+                                           "GAME OVER",
+                                           "Press enter to restart the game",
+                                           static_cast<float>(Dimensions::screen_width / 2) - 155.0f,
+                                           static_cast<float>(Dimensions::screen_height / 2) + 120.0f,
+                                           static_cast<float>(Dimensions::screen_width / 2) - 175.0f,
+                                           570.0f)},
+        // {InfoScreenTextType::Paused, InfoScreenText("PAUSED", "Press enter to resume the game", static_cast<float>(Dimensions::screen_width / 2) - 250.0f, static_cast<float>(Dimensions::screen_height / 2) + 120.0f, static_cast<float>(Dimensions::screen_width / 2) - 180.0f, 570.0f)}
+    };
 }
 
 InfoScreen::~InfoScreen()
@@ -131,12 +151,17 @@ void InfoScreen::draw()
 
     // Render text
     this->text_context.render(
-        this->title,
-        this->title_x,
-        this->title_y,
+        this->texts[this->text_type].title,
+        this->texts[this->text_type].title_x,
+        this->texts[this->text_type].title_y,
         1.0f,
         Colors::white);
-    this->text_context.render(this->subtitle, this->subtitle_x, this->subtitle_y, 0.5f, Colors::white);
+    this->text_context.render(
+        this->texts[this->text_type].subtitle,
+        this->texts[this->text_type].subtitle_x,
+        this->texts[this->text_type].subtitle_y,
+        0.5f,
+        Colors::white);
 }
 
 void InfoScreen::hide()
@@ -146,11 +171,7 @@ void InfoScreen::hide()
 
 void InfoScreen::set_game_over()
 {
-    this->title = "GAME OVER";
-    this->title_x = static_cast<float>(Dimensions::screen_width / 2) - 155.0f;
-
-    this->subtitle = "Press enter to restart the game";
-    this->subtitle_x = static_cast<float>(Dimensions::screen_width / 2) - 175.0f;
+    this->text_type = InfoScreenTextType::GameOver;
 
     this->hidden = false;
 }

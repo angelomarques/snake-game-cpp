@@ -4,11 +4,37 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <vector>
+#include <unordered_map>
 #include "shader.hpp"
 #include "shape.hpp"
 #include "layout.hpp"
 #include "snake.hpp"
 #include "text.hpp"
+
+class InfoScreenText
+{
+public:
+    std::string title;
+    std::string subtitle;
+
+    float title_x;
+    float title_y;
+
+    float subtitle_x;
+    float subtitle_y;
+
+    // Default constructor
+    InfoScreenText() : title(""), subtitle(""), title_x(0), title_y(0), subtitle_x(0), subtitle_y(0) {}
+
+    InfoScreenText(std::string title, std::string subtitle, float title_x, float title_y, float subtitle_x, float subtitle_y);
+};
+
+enum class InfoScreenTextType
+{
+    Welcome,
+    GameOver,
+    Paused
+};
 
 class InfoScreen
 {
@@ -19,14 +45,9 @@ private:
     Rectangle *overlay;
     bool hidden;
 
-    std::string title;
-    std::string subtitle;
+    InfoScreenTextType text_type;
 
-    float title_x;
-    float title_y;
-
-    float subtitle_x;
-    float subtitle_y;
+    std::unordered_map<InfoScreenTextType, InfoScreenText> texts = {};
 
 public:
     InfoScreen(GLuint VAO, GLuint main_shader_program);
