@@ -128,6 +128,9 @@ public:
 
     void reset();
 
+    bool get_is_playing();
+    void set_is_playing(bool is_playing);
+
     ~Snake();
 };
 

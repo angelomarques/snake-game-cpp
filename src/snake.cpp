@@ -343,6 +343,16 @@ std::vector<int> SnakeTile::get_grid_reference(glm::vec2 coordinates)
     return res;
 }
 
+bool Snake::get_is_playing()
+{
+    return this->is_playing;
+}
+
+void Snake::set_is_playing(bool is_playing)
+{
+    this->is_playing = is_playing;
+}
+
 bool Snake::get_is_game_over()
 {
     return this->is_game_over;

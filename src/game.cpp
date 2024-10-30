@@ -25,6 +25,20 @@ void Game::processInput()
         }
     }
 
+    if (glfwGetKey(this->window, GLFW_KEY_SPACE) == GLFW_PRESS)
+    {
+        if (this->snake.get_is_playing())
+        {
+            this->snake.set_is_playing(false);
+            this->info_screen->set_game_paused();
+        }
+        else
+        {
+            this->snake.set_is_playing(true);
+            this->info_screen->hide();
+        }
+    }
+
     if (this->snake.get_is_game_over())
     {
         this->info_screen->set_game_over();
@@ -128,8 +142,13 @@ InfoScreen::InfoScreen(GLuint VAO, GLuint main_shader_program) : VAO(VAO), main_
                                            static_cast<float>(Dimensions::screen_height / 2) + 120.0f,
                                            static_cast<float>(Dimensions::screen_width / 2) - 175.0f,
                                            570.0f)},
-        // {InfoScreenTextType::Paused, InfoScreenText("PAUSED", "Press enter to resume the game", static_cast<float>(Dimensions::screen_width / 2) - 250.0f, static_cast<float>(Dimensions::screen_height / 2) + 120.0f, static_cast<float>(Dimensions::screen_width / 2) - 180.0f, 570.0f)}
-    };
+        {InfoScreenTextType::Paused, InfoScreenText(
+                                         "PAUSED",
+                                         "Press space to resume the game",
+                                         static_cast<float>(Dimensions::screen_width / 2) - 102.5f,
+                                         static_cast<float>(Dimensions::screen_height / 2) + 120.0f,
+                                         static_cast<float>(Dimensions::screen_width / 2) - 190.0f,
+                                         570.0f)}};
 }
 
 InfoScreen::~InfoScreen()
@@ -172,6 +191,13 @@ void InfoScreen::hide()
 void InfoScreen::set_game_over()
 {
     this->text_type = InfoScreenTextType::GameOver;
+
+    this->hidden = false;
+}
+
+void InfoScreen::set_game_paused()
+{
+    this->text_type = InfoScreenTextType::Paused;
 
     this->hidden = false;
 }

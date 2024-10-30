@@ -58,6 +58,8 @@ public:
     void hide();
 
     void set_game_over();
+
+    void set_game_paused();
 };
 
 class Game
