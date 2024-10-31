@@ -127,28 +127,31 @@ InfoScreen::InfoScreen(GLuint VAO, GLuint main_shader_program) : VAO(VAO), main_
 {
     overlay = new Rectangle(glm::vec2(0.0f, 0.0f), glm::vec2(Dimensions::total_width, Dimensions::total_height), Colors::black_transparent);
 
+    const float title_y = static_cast<float>(Dimensions::screen_height / 2) + 120.0f;
+    const float subtitle_y = title_y - 50.0f;
+
     this->texts = {
         {InfoScreenTextType::Welcome, InfoScreenText(
                                           "SNAKE GAME IN C++",
                                           "Press enter to start the game",
                                           static_cast<float>(Dimensions::screen_width / 2) - 250.0f,
-                                          static_cast<float>(Dimensions::screen_height / 2) + 120.0f,
+                                          title_y,
                                           static_cast<float>(Dimensions::screen_width / 2) - 180.0f,
-                                          570.0f)},
+                                          subtitle_y)},
         {InfoScreenTextType::GameOver, InfoScreenText(
                                            "GAME OVER",
                                            "Press enter to restart the game",
                                            static_cast<float>(Dimensions::screen_width / 2) - 155.0f,
-                                           static_cast<float>(Dimensions::screen_height / 2) + 120.0f,
+                                           title_y,
                                            static_cast<float>(Dimensions::screen_width / 2) - 175.0f,
-                                           570.0f)},
+                                           subtitle_y)},
         {InfoScreenTextType::Paused, InfoScreenText(
                                          "PAUSED",
                                          "Press space to resume the game",
                                          static_cast<float>(Dimensions::screen_width / 2) - 102.5f,
-                                         static_cast<float>(Dimensions::screen_height / 2) + 120.0f,
+                                         title_y,
                                          static_cast<float>(Dimensions::screen_width / 2) - 190.0f,
-                                         570.0f)}};
+                                         subtitle_y)}};
 }
 
 InfoScreen::~InfoScreen()
