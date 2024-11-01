@@ -7,7 +7,22 @@ InfoScreenText::InfoScreenText(std::string title, std::string subtitle, float ti
 
 void Game::processInput()
 {
-    this->snake.processInput();
+    if (glfwGetKey(this->window, GLFW_KEY_LEFT) == GLFW_PRESS)
+    {
+        this->snake.on_direction_change(GLFW_KEY_LEFT);
+    }
+    if (glfwGetKey(this->window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+    {
+        this->snake.on_direction_change(GLFW_KEY_RIGHT);
+    }
+    if (glfwGetKey(this->window, GLFW_KEY_UP) == GLFW_PRESS)
+    {
+        this->snake.on_direction_change(GLFW_KEY_UP);
+    }
+    if (glfwGetKey(this->window, GLFW_KEY_DOWN) == GLFW_PRESS)
+    {
+        this->snake.on_direction_change(GLFW_KEY_DOWN);
+    }
 
     if (glfwGetKey(this->window, GLFW_KEY_ENTER) == GLFW_PRESS)
     {

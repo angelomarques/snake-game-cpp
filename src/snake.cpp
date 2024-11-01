@@ -194,6 +194,12 @@ void Snake::reset()
     this->is_playing = true;
     this->is_game_over = false;
     this->current_direction = SNAKE_DIRECTION_LEFT;
+
+    while (!this->inputs_queue.empty())
+    {
+        this->inputs_queue.pop();
+    }
+    this->inputs_queue.push(GLFW_KEY_LEFT);
 }
 
 void Snake::draw(GLuint shaderProgram, GLuint VAO)
@@ -231,6 +237,37 @@ void Snake::draw(GLuint shaderProgram, GLuint VAO)
     if (this->current_tile_position >= this->tile_size && last_tile != nullptr)
     {
         this->current_tile_position = 0.0f;
+
+        if (!this->inputs_queue.empty())
+        {
+            int current_input = this->inputs_queue.front();
+
+            while (!this->inputs_queue.empty())
+            {
+                if (this->inputs_queue.front() != current_input)
+                    break;
+
+                this->inputs_queue.pop();
+            }
+
+            switch (current_input)
+            {
+            case GLFW_KEY_LEFT:
+                this->current_direction = SNAKE_DIRECTION_LEFT;
+                break;
+            case GLFW_KEY_RIGHT:
+                this->current_direction = SNAKE_DIRECTION_RIGHT;
+                break;
+            case GLFW_KEY_UP:
+                this->current_direction = SNAKE_DIRECTION_UP;
+                break;
+            case GLFW_KEY_DOWN:
+                this->current_direction = SNAKE_DIRECTION_DOWN;
+                break;
+            default:
+                break;
+            }
+        }
 
         switch (this->current_direction)
         {
@@ -287,27 +324,12 @@ void Snake::draw(GLuint shaderProgram, GLuint VAO)
     this->draw_apple(shaderProgram, VAO);
 }
 
-void Snake::processInput()
+void Snake::on_direction_change(int direction)
 {
-    if (this->head_tile != nullptr)
-    {
-        if (glfwGetKey(this->window, GLFW_KEY_LEFT) == GLFW_PRESS)
-        {
-            this->current_direction = SNAKE_DIRECTION_LEFT;
-        }
-        if (glfwGetKey(this->window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-        {
-            this->current_direction = SNAKE_DIRECTION_RIGHT;
-        }
-        if (glfwGetKey(this->window, GLFW_KEY_UP) == GLFW_PRESS)
-        {
-            this->current_direction = SNAKE_DIRECTION_UP;
-        }
-        if (glfwGetKey(this->window, GLFW_KEY_DOWN) == GLFW_PRESS)
-        {
-            this->current_direction = SNAKE_DIRECTION_DOWN;
-        }
-    }
+    if (this->head_tile == nullptr)
+        return;
+
+    this->inputs_queue.push(direction);
 }
 
 void Snake::create_initial_snake()
@@ -357,6 +379,7 @@ void Snake::delete_snake()
 
 Snake::Snake(GLFWwindow *window, float tile_size) : window(window), is_playing(false), is_game_over(false), speed(0.02f), current_tile_position(0.0f), current_direction(SNAKE_DIRECTION_LEFT), initial_tile_count(3), tile_size(tile_size), head_tile(nullptr), apple(nullptr), available_grids(Dimensions::get_grid_coordinate_pairs())
 {
+    this->inputs_queue.push(GLFW_KEY_LEFT);
     this->create_initial_snake();
 
     const std::vector<int> available_random_grid_pair = this->get_random_available_grid();

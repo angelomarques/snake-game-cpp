@@ -7,6 +7,7 @@
 #include <iostream>
 #include <cmath>
 #include <vector>
+#include <queue>
 #include "shape.hpp"
 #include "snake_tile.hpp"
 
@@ -27,6 +28,8 @@ class Snake
     SnakeTile *apple;
 
     std::vector<std::vector<int>> available_grids;
+
+    std::queue<int> inputs_queue;
 
     void insert_tile(SnakeTile *tile);
 
@@ -56,7 +59,7 @@ public:
 
     void draw(GLuint shaderProgram, GLuint VAO);
 
-    void processInput();
+    void on_direction_change(int direction);
 
     void play();
     bool get_is_game_over();
