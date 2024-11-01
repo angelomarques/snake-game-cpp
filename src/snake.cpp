@@ -329,7 +329,8 @@ void Snake::on_direction_change(int direction)
     if (this->head_tile == nullptr)
         return;
 
-    this->inputs_queue.push(direction);
+    if (this->inputs_queue.back() != direction)
+        this->inputs_queue.push(direction);
 }
 
 void Snake::create_initial_snake()
