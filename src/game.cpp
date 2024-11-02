@@ -40,8 +40,9 @@ void Game::processInput()
         }
     }
 
-    if (glfwGetKey(this->window, GLFW_KEY_SPACE) == GLFW_PRESS)
+    if (glfwGetKey(this->window, GLFW_KEY_SPACE) == GLFW_PRESS && !this->is_key_pressed)
     {
+        this->is_key_pressed = true;
         if (this->snake.get_is_playing())
         {
             this->snake.set_is_playing(false);
@@ -52,6 +53,10 @@ void Game::processInput()
             this->snake.set_is_playing(true);
             this->info_screen->hide();
         }
+    }
+    else if (glfwGetKey(this->window, GLFW_KEY_SPACE) == GLFW_RELEASE)
+    {
+        this->is_key_pressed = false;
     }
 
     if (this->snake.get_is_game_over())
@@ -80,7 +85,7 @@ void Game::render()
     }
 }
 
-Game::Game(GLFWwindow *window) : window(window), main_layout(Dimensions::grid_axis_count, Dimensions::grid_axis_count), snake(window, Dimensions::total_width / Dimensions::grid_axis_count), shader("src/shaders/vertex_shader.glsl", "src/shaders/fragment_shader.glsl"), info_screen(nullptr)
+Game::Game(GLFWwindow *window) : window(window), main_layout(Dimensions::grid_axis_count, Dimensions::grid_axis_count), snake(window, Dimensions::total_width / Dimensions::grid_axis_count), shader("src/shaders/vertex_shader.glsl", "src/shaders/fragment_shader.glsl"), info_screen(nullptr), is_key_pressed(false)
 {
     // Define square vertices (two triangles to form a square)
     float vertices[] = {

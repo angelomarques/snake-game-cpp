@@ -75,6 +75,7 @@ private:
     std::string name;
 
     InfoScreen *info_screen;
+    bool is_key_pressed;
 
     void processInput();
 
