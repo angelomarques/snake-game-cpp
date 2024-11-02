@@ -16,6 +16,7 @@ class Snake
     GLFWwindow *window;
     bool is_playing;
     bool is_game_over;
+    bool has_won;
     float speed;
     float current_tile_position;
     int current_direction;
@@ -54,6 +55,8 @@ class Snake
 
     void set_new_apple();
 
+    void win();
+
 public:
     Snake(GLFWwindow *window, float tile_size);
 
@@ -68,6 +71,8 @@ public:
 
     bool get_is_playing();
     void set_is_playing(bool is_playing);
+
+    bool get_has_won();
 
     ~Snake();
 };

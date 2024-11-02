@@ -61,6 +61,8 @@ public:
     void set_game_over();
 
     void set_game_paused();
+
+    void set_game_win();
 };
 
 class Game

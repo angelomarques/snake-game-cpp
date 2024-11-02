@@ -3,6 +3,17 @@
 #include "constants.hpp"
 #include "utils.hpp"
 
+bool Snake::get_has_won()
+{
+    return this->has_won;
+}
+
+void Snake::win()
+{
+    this->has_won = true;
+    this->is_playing = false;
+}
+
 bool Snake::get_is_playing()
 {
     return this->is_playing;
@@ -56,6 +67,12 @@ void Snake::set_new_apple()
     SnakeTile *new_tile = new SnakeTile(rectangle, this->tile_size, this->tile_height);
     new_tile->set_direction(new_tile_direction);
     this->insert_tile(new_tile);
+
+    if (this->available_grids.size() == 0)
+    {
+        this->win();
+        return;
+    }
 
     const std::vector<int> available_random_grid_pair = this->get_random_available_grid();
 
@@ -193,6 +210,7 @@ void Snake::reset()
 
     this->is_playing = true;
     this->is_game_over = false;
+    this->has_won = false;
     this->current_direction = SNAKE_DIRECTION_LEFT;
 
     while (!this->inputs_queue.empty())

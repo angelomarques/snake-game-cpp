@@ -26,7 +26,7 @@ void Game::processInput()
 
     if (glfwGetKey(this->window, GLFW_KEY_ENTER) == GLFW_PRESS)
     {
-        if (this->snake.get_is_game_over())
+        if (this->snake.get_is_game_over() || this->snake.get_has_won())
         {
             // The SPACE is treated as "reset" button
             this->snake.reset();
@@ -62,6 +62,11 @@ void Game::processInput()
     if (this->snake.get_is_game_over())
     {
         this->info_screen->set_game_over();
+    }
+
+    if (this->snake.get_has_won())
+    {
+        this->info_screen->set_game_win();
     }
 }
 
@@ -228,6 +233,13 @@ void InfoScreen::set_game_over()
 void InfoScreen::set_game_paused()
 {
     this->text_type = InfoScreenTextType::Paused;
+
+    this->hidden = false;
+}
+
+void InfoScreen::set_game_win()
+{
+    this->text_type = InfoScreenTextType::Win;
 
     this->hidden = false;
 }
