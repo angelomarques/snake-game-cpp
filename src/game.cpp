@@ -171,7 +171,14 @@ InfoScreen::InfoScreen(GLuint VAO, GLuint main_shader_program) : VAO(VAO), main_
                                          static_cast<float>(Dimensions::screen_width / 2) - 102.5f,
                                          title_y,
                                          static_cast<float>(Dimensions::screen_width / 2) - 190.0f,
-                                         subtitle_y)}};
+                                         subtitle_y)},
+        {InfoScreenTextType::Win, InfoScreenText(
+                                      "YOU'VE WON!",
+                                      "Press enter to restart the game",
+                                      static_cast<float>(Dimensions::screen_width / 2) - 160.0f,
+                                      title_y,
+                                      static_cast<float>(Dimensions::screen_width / 2) - 175.0f,
+                                      subtitle_y)}};
 }
 
 InfoScreen::~InfoScreen()

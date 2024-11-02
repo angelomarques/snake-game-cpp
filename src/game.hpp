@@ -33,7 +33,8 @@ enum class InfoScreenTextType
 {
     Welcome,
     GameOver,
-    Paused
+    Paused,
+    Win
 };
 
 class InfoScreen
