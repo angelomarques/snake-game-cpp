@@ -71,7 +71,6 @@ void Snake::set_new_apple()
     if (this->available_grids.size() == 0)
     {
         this->win();
-        return;
     }
 
     const std::vector<int> available_random_grid_pair = this->get_random_available_grid();
