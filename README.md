@@ -1,7 +1,24 @@
-# SNAKE GAME
+# Snake Game in C++
+
+## About the project
 
 Snake game implemented in C++ using OpenGL and GLFW.
-This project wast built to improve my skills in Data Structures and Algorithms.
+This project wast built to following good architecture with Data Structures and Algorithms.
+
+<p align="center">
+  <img src="./docs/presentation.gif" alt="Presentation" width="800px">
+</p>
+
+## Concepts
+
+- [Snake Tile Data Structure](#snake-tile-data-structure)
+- [Collisions Logic](#collisions-logic)
+
+### Snake Tile Data Structure
+
+### Collisions Logic
+
+## How to run (Linux)
 
 <!-- ## How to run
 
@@ -19,13 +36,11 @@ $ ./snake-game
 - Press the space bar to make the snake jump.
 - Press the enter key to restart the game.
 
-## How to compile
+## How to compile and run
 
 ```bash
-$ mkdir build
-$ cd build
-$ cmake ..
 $ make
+$ ./main
 ```
 
 ## How to test
