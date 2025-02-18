@@ -16,6 +16,14 @@ This project wast built to following good architecture with Data Structures and 
 
 ### Snake Tile Data Structure
 
+<p align="center">
+  <img src="./docs/data-structure.jpg" alt="Presentation" width="1000px">
+</p>
+
+The snake game was implemented using a doubly linked list. This data structure allows us to efficiently manage the snake's body segments and create smooth moving animations.
+
+Each segment of the snake is represented as a node in the doubly linked list, with pointers to both the previous and next segments. This setup makes it easy to add new segments when the snake eats food and move the snake as the node takes the position of the next one.
+
 ### Collisions Logic
 
 ## How to run (Linux)
