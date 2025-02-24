@@ -13,6 +13,7 @@ This project wast built to following good architecture with Data Structures and 
 
 - [Snake Tile Data Structure](#snake-tile-data-structure)
 - [Collisions Logic](#collisions-logic)
+- [Event Queue](#event-queue)
 
 ### Snake Tile Data Structure
 
@@ -26,7 +27,6 @@ Each segment of the snake is represented as a node in the doubly linked list, wi
 
 ### Collisions Logic
 
-
 The collision logic is designed to detect when the snake's head collides with certain elements on the grid. This is achieved by calculating the specific grid position (using the x and y coordinates) of the snake's head and comparing it with the positions of other elements such as the border, apples, and other parts of the snake's body. Here are the key steps involved:
 
 1. Calculate Grid Position: Determine the grid position of the snake's head based on its x and y coordinates.
@@ -36,36 +36,98 @@ The collision logic is designed to detect when the snake's head collides with ce
 
 This logic ensures that the game can accurately detect and respond to collisions, maintaining the game's rules and providing a consistent gameplay experience.
 
-## How to run (Linux)
+### Event Queue
 
-<!-- ## How to run
+<p align="center">
+  <img src="./docs/event-queue.jpg" alt="Presentation" width="1000px">
+</p>
 
-```bash
-$ mkdir build
-$ cd build
-$ cmake ..
-$ make
-$ ./snake-game
+One of the problems I faced was when the user pressed multiple keys almost simultaneously, only one key (the last pressed) would apply to the snake.
+
+To fix that, I implemented an Event Queue that stores the keys that the user pressed and will apply that as the snake is moving.
+
+#### Implementation of the Queue
+
+```cpp
+void Snake::on_direction_change(int direction)
+{
+    if (this->head_tile == nullptr)
+        return;
+
+    // Check if that last pressed key is the same as the new one. If it is, there's no need to store it again.
+    if (this->inputs_queue.back() != direction)
+        this->inputs_queue.push(direction);
+}
+
+void Snake::draw(GLuint shaderProgram, GLuint VAO)
+{
+  // ...
+
+  if (!this->inputs_queue.empty())
+  {
+    int current_input = this->inputs_queue.front();
+
+    while (!this->inputs_queue.empty())
+    {
+        if (this->inputs_queue.front() != current_input)
+            break;
+
+        this->inputs_queue.pop();
+    }
+
+    switch (current_input)
+    {
+    case GLFW_KEY_LEFT:
+        this->current_direction = SNAKE_DIRECTION_LEFT;
+        break;
+    case GLFW_KEY_RIGHT:
+        this->current_direction = SNAKE_DIRECTION_RIGHT;
+        break;
+    case GLFW_KEY_UP:
+        this->current_direction = SNAKE_DIRECTION_UP;
+        break;
+    case GLFW_KEY_DOWN:
+        this->current_direction = SNAKE_DIRECTION_DOWN;
+        break;
+    default:
+        break;
+    }
+  }
+
+  // ...
+}
+
 ```
 
-## How to play
+## Installation
 
-- Use the arrow keys to move the snake.
-- Press the space bar to make the snake jump.
-- Press the enter key to restart the game.
+### Dependencies
 
-## How to compile and run
+Before building the project, ensure the following dependencies are installed:
+
+- **g++** (GNU C++ Compiler)
+- **libglfw3-dev** (GLFW library)
+- **libglu1-mesa-dev** (Mesa GLU library)
+- **libglew-dev** (GLEW library)
+- **libfreetype6-dev** (FreeType library)
+
+#### Install on Debian/Ubuntu:
 
 ```bash
-$ make
-$ ./main
+sudo apt update
+sudo apt install build-essential libglfw3-dev libglu1-mesa-dev libglew-dev libfreetype6-dev
 ```
 
-## How to test
+## Compile and Run
 
 ```bash
-$ ./snake-game
-``` -->
+make
+./main
+```
 
-<!-- - Linked list because we need the info of the next node -->
-<!-- - The tail of the snake is the head of the linked list because it's more fast to insert the new node -->
+## Contact
+
+If you have any questions or feedback, feel free to reach out:
+
+- **X / Twitter:** [@angelomarquesc](https://x.com/angelomarquesc)
+- **Email:** [angeloemanuelmarques@gmail.com](mailto:angeloemanuelmarques@gmail.com)
